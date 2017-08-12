@@ -1,0 +1,60 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xml:base="http://zsp.net.pl" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>ZSP - Aktualności</title>
+        <link>http://zsp.net.pl/taxonomy/term/1/0</link>
+        <description></description>
+        <language>pl</language>
+        <item>
+            <title>Kontrole w sklepach sieci POLOmarket</title>
+            <link>http://zsp.net.pl/kontrole-w-sklepach-sieci-polomarket</link>
+            <description></description>
+            <category domain="http://zsp.net.pl/zsp/aktualnosci">Aktualności</category>
+            <category domain="http://zsp.net.pl/kampanie/polo-market">Polo Market</category>
+            <pubDate>Sun, 06 Aug 2017 18:38:05 +0200</pubDate>
+            <dc:creator />
+            <guid isPermaLink="false">1874 at http://zsp.net.pl</guid>
+        </item>
+        <item>
+            <title>List otwarty do Zarządu Sieci POLOmarket</title>
+            <link>http://zsp.net.pl/list-otwarty-do-zarzadu-sieci-polomarket-0</link>
+            <description></description>
+            <category domain="http://zsp.net.pl/zsp/aktualnosci">Aktualności</category>
+            <category domain="http://zsp.net.pl/kampanie/polo-market">Polo Market</category>
+            <pubDate>Sun, 04 Jun 2017 22:00:42 +0200</pubDate>
+            <dc:creator />
+            <guid isPermaLink="false">1873 at http://zsp.net.pl</guid>
+        </item>
+        <item>
+            <title>Protest pod POLOmarket w Wadowicach</title>
+            <link>http://zsp.net.pl/protest-pod-polomarket-w-wadowicach</link>
+            <description></description>
+            <category domain="http://zsp.net.pl/zsp/aktualnosci">Aktualności</category>
+            <category domain="http://zsp.net.pl/kampanie/polo-market">Polo Market</category>
+            <pubDate>Sun, 14 May 2017 16:22:23 +0200</pubDate>
+            <dc:creator />
+            <guid isPermaLink="false">1871 at http://zsp.net.pl</guid>
+        </item>
+        <item>
+            <title>Protest pod POLOmarket w Przysieku</title>
+            <link>http://zsp.net.pl/protest-pod-polomarket-w-przysieku</link>
+            <description></description>
+            <category domain="http://zsp.net.pl/zsp/aktualnosci">Aktualności</category>
+            <category domain="http://zsp.net.pl/kampanie/polo-market">Polo Market</category>
+            <pubDate>Sun, 14 May 2017 13:30:03 +0200</pubDate>
+            <dc:creator />
+            <guid isPermaLink="false">1870 at http://zsp.net.pl</guid>
+        </item>
+        <item>
+            <title>List otwarty do zarządu sieci POLOmarket</title>
+            <link>http://zsp.net.pl/list-otwarty-do-zarzadu-sieci-polomarket</link>
+            <description></description>
+            <category domain="http://zsp.net.pl/zsp/aktualnosci">Aktualności</category>
+            <category domain="http://zsp.net.pl/kampanie/polo-market">Polo Market</category>
+            <pubDate>Sun, 14 May 2017 13:19:04 +0200</pubDate>
+            <dc:creator />
+            <guid isPermaLink="false">1869 at http://zsp.net.pl</guid>
+        </item>
+    </channel>
+</rss>
