@@ -2,12 +2,22 @@
 
 namespace AppBundle\Entity;
 
-class FeedSource
+class FeedSource implements EntityInterface
 {
     /**
      * @var string $id UUID-4
      */
     protected $id;
+
+    /**
+     * @var string $title
+     */
+    protected $title;
+
+    /**
+     * @var string $description
+     */
+    protected $description;
 
     /**
      * @var NewsBoard $newsBoard
@@ -27,18 +37,32 @@ class FeedSource
      *
      * @var array $sourceData
      */
-    protected $sourceData;
+    protected $sourceData = [];
 
     /**
      * @var string $defaultLanguage
      */
     protected $defaultLanguage;
 
+    /**
+     * @var \DateTimeImmutable $lastCollectionDate
+     */
+    protected $lastCollectionDate;
+
+    /**
+     * @var bool $enabled
+     */
+    protected $enabled;
+
     public static function create(
         NewsBoard $board,
         string $collectorName,
         array $sourceData,
-        string $defaultLanguage
+        string $defaultLanguage,
+        \DateTimeImmutable $lastCollectionDate,
+        bool $enabled,
+        string $title,
+        string $description
     ) : FeedSource {
 
         $feed = new self();
@@ -46,6 +70,10 @@ class FeedSource
         $feed->collectorName = $collectorName;
         $feed->sourceData = $sourceData;
         $feed->defaultLanguage = $defaultLanguage;
+        $feed->lastCollectionDate = $lastCollectionDate;
+        $feed->enabled = $enabled;
+        $feed->title = $title;
+        $feed->description = $description;
 
         return $feed;
     }
@@ -61,32 +89,114 @@ class FeedSource
     /**
      * @return NewsBoard
      */
-    public function getNewsBoard() : NewsBoard
+    public function getNewsBoard()
     {
         return $this->newsBoard;
     }
 
-    /**
-     * @return string
-     */
     public function getCollectorName() : string
     {
         return $this->collectorName ?? '';
     }
 
-    /**
-     * @return array
-     */
     public function getSourceSpecification() : array
     {
         return $this->sourceData ?? [];
     }
 
-    /**
-     * @return string
-     */
     public function getDefaultLanguage() : string
     {
         return $this->defaultLanguage ?? '';
+    }
+
+    public function getSourceData() : array
+    {
+        return $this->sourceData;
+    }
+
+    public function setCollectorName($collectorName) : FeedSource
+    {
+        $this->collectorName = $collectorName;
+        return $this;
+    }
+
+    public function setNewsBoard(NewsBoard $newsBoard) : FeedSource
+    {
+        $this->newsBoard = $newsBoard;
+        return $this;
+    }
+
+    public function setSourceData($sourceData) : FeedSource
+    {
+        $this->sourceData = $sourceData;
+        return $this;
+    }
+
+    public function setDefaultLanguage(string $defaultLanguage) : FeedSource
+    {
+        $this->defaultLanguage = $defaultLanguage;
+        return $this;
+    }
+
+    public function getPublicTypeName() : string
+    {
+        return 'feedsource';
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'source_data' => $this->getSourceSpecification(),
+            'collector_name' => $this->getCollectorName(),
+            'default_language' => $this->getDefaultLanguage(),
+            'news_board' => $this->getNewsBoard() ? $this->getNewsBoard()->getId() : null,
+        ];
+    }
+
+    /**
+     * @return \DateTimeImmutable
+     */
+    public function getLastCollectionDate()
+    {
+        return $this->lastCollectionDate ?? new \DateTime('1980-01-01');
+    }
+
+    public function isEnabled() : bool
+    {
+        return $this->enabled ?? false;
+    }
+
+    public function __toString() : string
+    {
+        return 'FeedSource:' . $this->getId();
+    }
+
+    public function getTitle() : string
+    {
+        return $this->title ?? '';
+    }
+
+    public function getDescription() : string
+    {
+        return $this->description ?? '';
+    }
+
+    public function setEnabled(bool $enabled) : FeedSource
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    public function setTitle(string $title) : FeedSource
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function setDescription(string $description) : FeedSource
+    {
+        $this->description = $description;
+        return $this;
     }
 }

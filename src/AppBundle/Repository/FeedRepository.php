@@ -4,6 +4,7 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\FeedEntry;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 /**
  * @see FeedEntry
@@ -20,9 +21,14 @@ class FeedRepository extends EntityRepository
     public function findByFeedId(string $id)
     {
         $qb = $this->createQueryBuilder('f');
-        $qb->where('f.news_id = :news_id');
+        $qb->where('f.newsId = :news_id');
         $qb->setParameter('news_id', $id);
 
-        return $qb->getQuery()->getSingleResult();
+        try {
+            return $qb->getQuery()->getSingleResult();
+
+        } catch (NoResultException $exception) {
+            return null;
+        }
     }
 }

@@ -15,7 +15,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle(),
+            new \AppBundle\AppBundle(),
+            new \RssSupportBundle\RssSupportBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
@@ -29,7 +30,7 @@ class AppKernel extends Kernel
             }
         }
 
-        return $bundles;
+        return array_merge($bundles, []);
     }
 
     public function getRootDir()

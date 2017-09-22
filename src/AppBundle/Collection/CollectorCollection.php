@@ -45,4 +45,9 @@ class CollectorCollection extends ArrayCollection
 
         throw new \LogicException('Cannot find collector "' . $collectorName . '"');
     }
+
+    public function getNames() : array
+    {
+        return array_keys($this->indexByName);
+    }
 }

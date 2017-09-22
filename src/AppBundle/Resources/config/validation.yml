@@ -1,0 +1,24 @@
+AppBundle\Entity\NewsBoard:
+    properties:
+        description:
+            - NotBlank: ~
+            - Length:
+                min: 5
+                max: 254
+
+        name:
+            - NotBlank: ~
+            - Length:
+                min: 2
+                max: 24
+
+AppBundle\Entity\FeedSource:
+    properties:
+        collectorName:
+            - NotBlank: ~
+
+        sourceData:
+            - NotBlank: ~
+
+        defaultLanguage:
+            - Language: ~

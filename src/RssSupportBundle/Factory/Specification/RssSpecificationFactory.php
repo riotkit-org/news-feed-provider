@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace AppBundle\Factory\Specification;
+namespace RssSupportBundle\Factory\Specification;
 
-use AppBundle\Service\Collector\RssCollector;
-use AppBundle\ValueObject\Specification\RssSourceSpecification;
+use RssSupportBundle\Service\Collector\RssCollector;
+use RssSupportBundle\ValueObject\Specification\RssSourceSpecification;
 
 class RssSpecificationFactory
 {

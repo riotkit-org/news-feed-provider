@@ -1,0 +1,22 @@
+services:
+    PicoFeed\Reader\Reader:
+        class: PicoFeed\Reader\Reader
+
+    RssSupportBundle\Factory\Specification\RssSpecificationFactory:
+        class: RssSupportBundle\Factory\Specification\RssSpecificationFactory
+
+    RssSupportBundle\Service\Collector\RssCollector:
+        class: RssSupportBundle\Service\Collector\RssCollector
+        public: true
+        arguments:
+            $reader: "@PicoFeed\\Reader\\Reader"
+            $specificationFactory: "@RssSupportBundle\\Factory\\Specification\\RssSpecificationFactory"
+        tags:
+            - { "name": "nfp.harvesting.collector" }
+
+    RssSupportBundle\Form\Type\SourceData\RssFormType:
+        class: RssSupportBundle\Form\Type\SourceData\RssFormType
+        public: true
+        tags:
+            - { "name": "nfp.forms.feedsource.sourceData" }
+

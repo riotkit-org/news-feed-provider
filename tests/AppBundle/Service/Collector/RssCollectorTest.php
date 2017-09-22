@@ -4,8 +4,8 @@ namespace Tests\AppBundle\Service\Collector;
 
 use AppBundle\Entity\FeedSource;
 use AppBundle\Entity\NewsBoard;
-use AppBundle\Factory\Specification\RssSpecificationFactory;
-use AppBundle\Service\Collector\RssCollector;
+use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
+use RssSupportBundle\Service\Collector\RssCollector;
 use Tests\TestCase;
 
 /**
@@ -18,13 +18,17 @@ class RssCollectorTest extends TestCase
      */
     public function collects_at_least_one_entry()
     {
-        $collector = new RssCollector($this->createReader(), new RssSpecificationFactory());
+        $collector = new \RssSupportBundle\Service\Collector\RssCollector($this->createReader(), new RssSpecificationFactory());
         $feeds = $collector->collect(
             FeedSource::create(
                 new NewsBoard(),
                 'rss',
                 ['url' => 'file://' . $this->getTestFeedPath()],
-                'pl'
+                'pl',
+                new \DateTimeImmutable('now'),
+                true,
+                'Test',
+                ''
             )
         );
 

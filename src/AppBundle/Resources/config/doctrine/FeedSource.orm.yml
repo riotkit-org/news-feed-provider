@@ -1,0 +1,49 @@
+AppBundle\Entity\FeedSource:
+    type: entity
+    repositoryClass: AppBundle\Repository\FeedSourceRepository
+    table: feed_source
+
+    id:
+        id:
+            type: string
+            column: id
+            generator:
+                strategy: UUID
+
+    fields:
+        collectorName:
+            type: string
+            length: 24
+            column: collector_name
+
+        sourceData:
+            type: json
+            column: source_data
+
+        defaultLanguage:
+            type: string
+            length: 3
+
+        lastCollectionDate:
+            type: datetime_immutable
+            nullable: true
+
+        title:
+            type: string
+            length: 64
+
+        description:
+            type: text
+            length: 2048
+            nullable: true
+
+        enabled:
+            type: boolean
+            options:
+                default: true
+
+
+    manyToOne:
+        newsBoard:
+            targetEntity: AppBundle\Entity\NewsBoard
+            inversedBy: feedSources

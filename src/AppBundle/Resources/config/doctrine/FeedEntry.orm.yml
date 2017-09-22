@@ -1,0 +1,50 @@
+AppBundle\Entity\FeedEntry:
+    type: entity
+    repositoryClass: AppBundle\Repository\FeedRepository
+    table: "feed_entry"
+
+    id:
+        newsId:
+            type: string
+            column: id
+
+    fields:
+        title:
+            type: string
+            length: 254
+            column: title
+            options:
+                comment: "Publication's title"
+
+        content:
+            type: text
+
+        sourceUrl:
+            type: string
+            length: 254
+
+        date:
+            type: datetime_immutable
+            column: date
+            options:
+                comment: "Publication's date (comes from external source)"
+
+        collectionDate:
+            type: datetime_immutable
+            column: collection_date
+            options:
+                comment: "Date when the entry was fetched by the collector"
+
+        language:
+            type: string
+            column: language
+
+        tags:
+            type: json_array
+            column: tags
+
+    manyToOne:
+        feedSource:
+            targetEntity: AppBundle\Entity\FeedSource
+
+

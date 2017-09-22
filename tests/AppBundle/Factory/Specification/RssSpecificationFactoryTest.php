@@ -2,7 +2,7 @@
 
 namespace Tests\AppBundle\Factory\Specification;
 
-use AppBundle\Factory\Specification\RssSpecificationFactory;
+use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
 use Tests\TestCase;
 
 /**

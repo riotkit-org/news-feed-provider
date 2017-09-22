@@ -1,0 +1,27 @@
+AppBundle\Entity\NewsBoard:
+    type: entity
+    repositoryClass: AppBundle\Repository\NewsBoardRepository
+    table: news_board
+
+    id:
+        id:
+            type: string
+            column: id
+            generator:
+                strategy: UUID
+
+    fields:
+        name:
+            type: string
+            length: 48
+
+        description:
+            type: string
+            length: 256
+
+
+    oneToMany:
+        feedSources:
+            targetEntity: AppBundle\Entity\FeedSource
+            inversedBy: newsBoard
+            mappedBy: feedSources

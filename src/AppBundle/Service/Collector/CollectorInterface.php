@@ -10,4 +10,5 @@ interface CollectorInterface
     public function collect(FeedSource $source) : FeedCollection;
     public function isAbleToHandle(FeedSource $source) : bool;
     public static function getCollectorName() : string;
+    public function __toString() : string;
 }

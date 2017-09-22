@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace AppBundle\Service\Collector;
+namespace RssSupportBundle\Service\Collector;
 
 use AppBundle\Collection\FeedCollection;
 use AppBundle\Entity\FeedEntry;
 use AppBundle\Entity\FeedSource;
-use AppBundle\Factory\Specification\RssSpecificationFactory;
-use AppBundle\ValueObject\Specification\RssSourceSpecification;
+use AppBundle\Exception\DuplicatedDataException;
+use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
+use AppBundle\Service\Collector\CollectorInterface;
+use RssSupportBundle\ValueObject\Specification\RssSourceSpecification;
 use PicoFeed\Parser\Item;
 use PicoFeed\Reader\Reader;
 use DateTimeImmutable;
@@ -42,7 +44,12 @@ class RssCollector implements CollectorInterface
         );
 
         foreach ($parser->execute()->getItems() as $item) {
-            $feeds->add($this->parseFeedItem($item, $source));
+            try {
+                $feeds->add($this->parseFeedItem($item, $source));
+
+            } catch (DuplicatedDataException $exception) {
+                // pass
+            }
         }
 
         return $feeds;
@@ -58,19 +65,26 @@ class RssCollector implements CollectorInterface
         return 'rss';
     }
 
+    public function __toString() : string
+    {
+        return self::getCollectorName();
+    }
+
     protected function parseFeedItem(
         Item $item,
         FeedSource $feedSource
     ) : FeedEntry {
 
-        return FeedEntry::create(
-            $this->getId($item),
-            $feedSource->getNewsBoard(),
-            $item->getTitle(),
-            DateTimeImmutable::createFromMutable($item->getPublishedDate()),
-            new DateTimeImmutable('now'),
-            $item->getLanguage() ? $item->getLanguage() : $feedSource->getDefaultLanguage()
-        );
+        return FeedEntry::create([
+            'newsId'         => $this->getId($item),
+            'feedSource'     => $feedSource,
+            'title'          => $item->getTitle(),
+            'content'        => $item->getContent(),
+            'sourceUrl'      => $item->getUrl(),
+            'date'           => DateTimeImmutable::createFromMutable($item->getPublishedDate()),
+            'collectionDate' => new DateTimeImmutable('now'),
+            'language'       => $item->getLanguage() ? $item->getLanguage() : $feedSource->getDefaultLanguage(),
+        ]);
     }
 
     protected function getId(Item $item) : string

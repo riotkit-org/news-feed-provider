@@ -4,10 +4,10 @@ namespace Tests\AppBundle\Service;
 
 use AppBundle\Entity\FeedSource;
 use AppBundle\Entity\NewsBoard;
-use AppBundle\Factory\Specification\RssSpecificationFactory;
+use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
 use AppBundle\Manager\FeedManager;
 use AppBundle\Repository\FeedRepository;
-use AppBundle\Service\Collector\RssCollector;
+use RssSupportBundle\Service\Collector\RssCollector;
 use AppBundle\Service\HarvestingMachine;
 use Doctrine\ORM\EntityManager;
 use Tests\TestCase;
@@ -39,7 +39,11 @@ class HarvestingMachineTest extends TestCase
                 new NewsBoard(),
                 'rss',
                 ['url' => 'file://' . $this->getTestFeedPath()],
-                'pl'
+                'pl',
+                new \DateTimeImmutable('now'),
+                true,
+                'Test',
+                ''
             )
         ]);
     }
@@ -68,7 +72,11 @@ class HarvestingMachineTest extends TestCase
                 new NewsBoard(),
                 'rss',
                 ['url' => 'file://' . $this->getTestFeedPath()],
-                'pl'
+                'pl',
+                new \DateTimeImmutable('now'),
+                true,
+                'Test',
+                ''
             );
         }
 

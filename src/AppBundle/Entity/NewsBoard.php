@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\PersistentCollection;
 
-class NewsBoard
+class NewsBoard implements EntityInterface
 {
     /**
      * @var string $id UUID-4
@@ -25,6 +25,18 @@ class NewsBoard
      * @var PersistentCollection|FeedSource[] $feedSources
      */
     protected $feedSources;
+
+    public static function create(
+        string $name,
+        string $description
+    ) : NewsBoard {
+
+        $board = new self();
+        $board->name = $name;
+        $board->description = $description;
+
+        return $board;
+    }
 
     /**
      * @return string
@@ -56,5 +68,30 @@ class NewsBoard
     public function getFeedSources()
     {
         return $this->feedSources;
+    }
+
+    public function setName(string $name) : NewsBoard
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setDescription(string $description) : NewsBoard
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getPublicTypeName() : string
+    {
+        return 'newsboard';
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+        ];
     }
 }

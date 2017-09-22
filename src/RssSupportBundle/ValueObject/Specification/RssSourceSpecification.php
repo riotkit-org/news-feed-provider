@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace AppBundle\ValueObject\Specification;
+namespace RssSupportBundle\ValueObject\Specification;
 
 class RssSourceSpecification
 {
