@@ -3,30 +3,43 @@
 namespace AppBundle\Controller\Admin\FeedSource;
 
 use AppBundle\Entity\FeedSource;
+use AppBundle\Form\Model\FeedSourceSearchCriteria;
 use AppBundle\Manager\FeedSourceManager;
 use AppBundle\ValueObject\Response\EntityListingResponse;
+use AppBundle\ValueObject\Response\SearchFieldsDescriptionResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{
+    Request, Response
+};
 
 /**
  * @see FeedSource
  */
 class ListFeedSourceController extends Controller
 {
-    public function listAction() : Response
+    public function listAction(Request $request, string $boardId) : Response
     {
         return new EntityListingResponse(
             $this->getManager()
                 ->getRepository()
-                ->findAll()
+                ->findAllByBoardId($boardId)
         );
     }
 
-    public function searchAction() : Response
+    public function searchAction(Request $request, string $boardId) : Response
     {
-        $this->getManager()
-            ->getRepository()
-            ->findBySearchCriteria($criteria);
+        $criteria = new FeedSourceSearchCriteria(json_decode($request->getContent(), true));
+
+        return new EntityListingResponse(
+            $this->getManager()
+                ->getRepository()
+                ->findBySearchCriteria($criteria, $boardId)
+        );
+    }
+
+    public function describeSearchAction() : Response
+    {
+        return new SearchFieldsDescriptionResponse(new FeedSourceSearchCriteria([]));
     }
 
     protected function getManager() : FeedSourceManager

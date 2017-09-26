@@ -42,16 +42,47 @@ class FeedSourceSearchCriteria implements SearchCriteriaInterface
      */
     protected $enabled = [true];
 
+    public function __construct(array $input)
+    {
+        $this->id              = $input['id'] ?? [];
+        $this->newsBoardId     = $input['newsBoardId'] ?? [];
+        $this->collectorName   = $input['collectorName'] ?? [];
+        $this->title           = $input['title'] ?? '';
+        $this->description     = $input['description'] ?? '';
+        $this->defaultLanguage = $input['defaultLanguage'] ?? '';
+        $this->enabled         = $input['enabled'] ?? [true];
+    }
+
     public function getDefinition() : array
     {
         return [
             [
                 'name' => 'enabled',
-                'handler' => 'multiple-value',
+                'handler' => SearchCriteriaInterface::HANDLER_MULTIPLE_VALUE,
             ],
             [
                 'name' => 'description',
-                'handler' => 'contains-value',
+                'handler' => SearchCriteriaInterface::HANDLER_CONTAINS_VALUE,
+            ],
+            [
+                'name' => 'title',
+                'handler' => SearchCriteriaInterface::HANDLER_CONTAINS_VALUE,
+            ],
+            [
+                'name' => 'newsBoardId',
+                'handler' => SearchCriteriaInterface::HANDLER_MULTIPLE_VALUE,
+            ],
+            [
+                'name' => 'collectorName',
+                'handler' => SearchCriteriaInterface::HANDLER_MULTIPLE_VALUE,
+            ],
+            [
+                'name' => 'description',
+                'handler' => SearchCriteriaInterface::HANDLER_CONTAINS_VALUE,
+            ],
+            [
+                'name' => 'defaultLanguage',
+                'handler' => SearchCriteriaInterface::HANDLER_MULTIPLE_VALUE,
             ],
         ];
     }
@@ -102,5 +133,13 @@ class FeedSourceSearchCriteria implements SearchCriteriaInterface
     public function getDefaultLanguage()
     {
         return $this->defaultLanguage;
+    }
+
+    /**
+     * @return bool[]
+     */
+    public function isEnabled() : array
+    {
+        return $this->enabled;
     }
 }

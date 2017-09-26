@@ -2,10 +2,13 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\AppEvents;
 use AppBundle\Collection\FeedCollection;
 use AppBundle\Entity\FeedEntry;
 use AppBundle\Repository\FeedRepository;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Manages data persistence for feed entries
@@ -25,16 +28,28 @@ class FeedManager
     private $repository;
 
     /**
-     * @var FeedEntry[] $toPersist
+     * @var FeedEntry[] $toFlush
      */
-    private $toPersist = [];
+    private $toFlush = [];
 
-    public function __construct(EntityManager $entityManager, FeedRepository $repository)
+    /**
+     * @var EventDispatcherInterface $dispatcher
+     */
+    private $dispatcher;
+
+    public function __construct(EntityManager $em, EventDispatcherInterface $eventDispatcher)
     {
-        $this->entityManager = $entityManager;
-        $this->repository = $repository;
+        $this->entityManager = $em;
+        $this->repository = $em->getRepository(FeedEntry::class);
+        $this->dispatcher = $eventDispatcher;
     }
 
+    /**
+     * Push entries to the database
+     * if they do not exists yet
+     *
+     * @param FeedCollection $feeds
+     */
     public function push(FeedCollection $feeds)
     {
         foreach ($feeds as $feed) {
@@ -48,12 +63,22 @@ class FeedManager
 
     private function persist(FeedEntry $feed)
     {
+        $this->dispatcher->dispatch(AppEvents::FEED_PRE_PERSIST, new GenericEvent($feed));
+
         $this->entityManager->persist($feed);
-        $this->toPersist[] = $feed;
+        $this->toFlush[] = $feed;
     }
 
     private function flush(FeedEntry $feed = null)
     {
-        $this->entityManager->flush($feed ?? $this->toPersist);
+        $this->entityManager->flush($feed ?? $this->toFlush);
+    }
+
+    /**
+     * @return FeedRepository
+     */
+    public function getRepository(): FeedRepository
+    {
+        return $this->repository;
     }
 }

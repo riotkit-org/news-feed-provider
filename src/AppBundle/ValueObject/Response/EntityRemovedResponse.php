@@ -12,13 +12,13 @@ class EntityRemovedResponse extends JsonResponse
         $data = [
             'status_message' => 'Entity was removed',
             'data' => [
-                'type' => $entity->getPublicTypeName(),
+                'type' => $entity::getPublicTypeName(),
                 'id' => $entity->getId(),
                 'attributes' => $entity,
             ],
         ];
 
-        $headers['X-Reason'] = $entity->getPublicTypeName() . ' was deleted';
+        $headers['X-Reason'] = $entity::getPublicTypeName() . ' was deleted';
         parent::__construct($data, 200, $headers, false);
     }
 }

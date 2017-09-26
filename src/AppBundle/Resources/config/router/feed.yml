@@ -1,0 +1,7 @@
+nfp.entity.feed_entry.browse:
+    path: /browse/{page}/{limit}
+    defaults:
+        _controller: AppBundle:Admin/FeedEntry/ListFeedEntry:search
+        page: 1
+    methods:
+        - POST

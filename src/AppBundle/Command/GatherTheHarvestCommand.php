@@ -7,9 +7,13 @@ use AppBundle\Service\HarvestingMachine;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\{
+    ContainerAwareInterface, ContainerInterface
+};
 
+/**
+ * Collects data from data sources
+ */
 class GatherTheHarvestCommand extends Command implements ContainerAwareInterface
 {
     /**

@@ -48,6 +48,13 @@ services:
         arguments:
             $em: "@doctrine.orm.entity_manager"
 
+    AppBundle\Manager\FeedManager:
+        class: AppBundle\Manager\FeedManager
+        public: true
+        arguments:
+            $em: "@doctrine.orm.entity_manager"
+            $eventDispatcher: "@event_dispatcher"
+
     AppBundle\Repository\FeedSourceRepository:
         factory: ["@doctrine", "getRepository"]
         public: true

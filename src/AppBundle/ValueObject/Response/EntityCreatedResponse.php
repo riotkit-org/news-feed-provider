@@ -11,13 +11,13 @@ class EntityCreatedResponse extends JsonResponse
     {
         $data = [
             'data' => [
-                'type' => $entity->getPublicTypeName(),
+                'type' => $entity::getPublicTypeName(),
                 'id' => $entity->getId(),
                 'attributes' => $entity,
             ],
         ];
 
-        $headers['X-Reason'] = $entity->getPublicTypeName() . ' was created';
+        $headers['X-Reason'] = $entity::getPublicTypeName() . ' was created';
         parent::__construct($data, 200, $headers, false);
     }
 }

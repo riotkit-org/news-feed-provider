@@ -70,19 +70,25 @@ class NewsBoard implements EntityInterface
         return $this->feedSources;
     }
 
-    public function setName(string $name) : NewsBoard
+    public function setName(string $name): NewsBoard
     {
         $this->name = $name;
         return $this;
     }
 
-    public function setDescription(string $description) : NewsBoard
+    public function setDescription(string $description): NewsBoard
     {
         $this->description = $description;
         return $this;
     }
 
-    public function getPublicTypeName() : string
+    public function setId(string $id): NewsBoard
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public static function getPublicTypeName(): string
     {
         return 'newsboard';
     }
@@ -92,6 +98,19 @@ class NewsBoard implements EntityInterface
         return [
             'name' => $this->getName(),
             'description' => $this->getDescription(),
+        ];
+    }
+
+    public function getRelations(): array
+    {
+        $feedSourcesIndexed = [];
+
+        foreach ($this->getFeedSources() as $feedSource) {
+            $feedSourcesIndexed[$feedSource->getId()] = $feedSource;
+        }
+
+        return [
+            FeedSource::getPublicTypeName() => $feedSourcesIndexed,
         ];
     }
 }

@@ -1,0 +1,18 @@
+services:
+    ImageRepositoryBundle\Service\ImageUploader:
+        class: ImageRepositoryBundle\Service\ImageUploader
+        arguments:
+            $uploader: "@wolnosciowiec.file_repository.uploader"
+            $imageTags: ['news-feed-provider'] # todo: Add to configuration file
+
+    ImageRepositoryBundle\Service\ImageExtractor:
+        class: ImageRepositoryBundle\Service\ImageExtractor
+
+    ImageRepositoryBundle\Processor\FeedProcessor:
+        class: ImageRepositoryBundle\Service\Processor\FeedProcessor
+        arguments:
+            $uploader: '@ImageRepositoryBundle\Service\ImageUploader'
+            $extractor: '@ImageRepositoryBundle\Service\ImageExtractor'
+            $logger: "@logger"
+        tags:
+            - kernel.event_subscriber

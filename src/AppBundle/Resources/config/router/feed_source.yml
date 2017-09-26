@@ -1,0 +1,34 @@
+nfp.entity.feed_source.create:
+    path: /create
+    defaults:
+        _controller: AppBundle:Admin/FeedSource/AddFeedSource:submit
+    methods:
+        - POST
+
+nfp.entity.feed_source.delete:
+    path: /{sourceId}
+    defaults:
+        _controller: AppBundle:Admin/FeedSource/RemoveFeedSource:remove
+    methods:
+        - DELETE
+
+nfp.entity.feed_source.list:
+    path: /newsBoard-{boardId}
+    defaults:
+        _controller: AppBundle:Admin/FeedSource/ListFeedSource:list
+    methods:
+        - GET
+
+nfp.entity.feed_source.search.help:
+    path: /search/help
+    defaults:
+        _controller: AppBundle:Admin/FeedSource/ListFeedSource:describeSearch
+    methods:
+        - GET
+
+nfp.entity.feed_source.search:
+    path: /search/newsBoard-{boardId}
+    defaults:
+        _controller: AppBundle:Admin/FeedSource/ListFeedSource:search
+    methods:
+        - POST

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -15,8 +15,13 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Wolnosciowiec\FileRepositoryBundle\FileRepositoryBundle(),
+            new \JMS\SerializerBundle\JMSSerializerBundle(),
+
+            // application bundles
             new \AppBundle\AppBundle(),
             new \RssSupportBundle\RssSupportBundle(),
+            new \ImageRepositoryBundle\ImageRepositoryBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

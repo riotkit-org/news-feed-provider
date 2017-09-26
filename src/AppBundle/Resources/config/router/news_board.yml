@@ -1,0 +1,20 @@
+nfp.entity.news_board.create:
+    path: /create
+    defaults:
+        _controller: AppBundle:Admin/NewsBoard/AddNewsBoard:submit
+    methods:
+        - POST
+
+nfp.entity.news_board.delete:
+    path: /{boardId}
+    defaults:
+        _controller: AppBundle:Admin/NewsBoard/RemoveNewsBoard:remove
+    methods:
+        - DELETE
+
+nfp.entity.news_board.list:
+    path: /
+    defaults:
+        _controller: AppBundle:Admin/NewsBoard/ListNewsBoard:list
+    methods:
+        - GET

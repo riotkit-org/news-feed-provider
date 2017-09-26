@@ -11,7 +11,7 @@ Host: localhost:8000
 Cache-Control: no-cache
 
 {
-	"collectorName": "rss",
+    "collectorName": "rss",
     "newsBoard": "981AF0A9-8ED5-4A9F-8C7E-5C79BA53FFD9",
     "defaultLanguage": "pl",
     "sourceData": {

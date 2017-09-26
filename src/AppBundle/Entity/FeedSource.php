@@ -138,7 +138,7 @@ class FeedSource implements EntityInterface
         return $this;
     }
 
-    public function getPublicTypeName() : string
+    public static function getPublicTypeName() : string
     {
         return 'feedsource';
     }
@@ -146,11 +146,26 @@ class FeedSource implements EntityInterface
     public function jsonSerialize()
     {
         return [
-            'id' => $this->getId(),
-            'source_data' => $this->getSourceSpecification(),
-            'collector_name' => $this->getCollectorName(),
-            'default_language' => $this->getDefaultLanguage(),
-            'news_board' => $this->getNewsBoard() ? $this->getNewsBoard()->getId() : null,
+            'id'                   => $this->getId(),
+            NewsBoard::getPublicTypeName() => $this->getNewsBoard() ? $this->getNewsBoard()->getId() : null,
+            'title'                => $this->getTitle(),
+            'description'          => $this->getDescription(),
+            'source_data'          => $this->getSourceSpecification(),
+            'collector_name'       => $this->getCollectorName(),
+            'default_language'     => $this->getDefaultLanguage(),
+            'last_collection_date' => $this->getLastCollectionDate()->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelations(): array
+    {
+        return [
+            NewsBoard::getPublicTypeName() => [
+                $this->getNewsBoard()->getId() => $this->getNewsBoard(),
+            ],
         ];
     }
 

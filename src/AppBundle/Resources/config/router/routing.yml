@@ -1,48 +1,11 @@
-nfp.entity.news_board.create:
-    path: /api/news_board/create
-    defaults:
-        _controller: AppBundle:Admin/NewsBoard/AddNewsBoard:submit
-    methods:
-        - POST
+api.newsboard:
+    prefix: /api/news_board
+    resource: news_board.yml
 
-nfp.entity.news_board.list:
-    path: /api/news_board
-    defaults:
-        _controller: AppBundle:Admin/NewsBoard/ListNewsBoard:list
-    methods:
-        - GET
+api.feed_source:
+    prefix: /api/feed_source
+    resource: feed_source.yml
 
-nfp.entity.news_board.delete:
-    path: /api/news_board/{boardId}
-    defaults:
-        _controller: AppBundle:Admin/NewsBoard/RemoveNewsBoard:remove
-    methods:
-        - DELETE
-
-nfp.entity.feed_source.create:
-    path: /api/feed_source/create
-    defaults:
-        _controller: AppBundle:Admin/FeedSource/AddFeedSource:submit
-    methods:
-        - POST
-
-nfp.entity.feed_source.delete:
-    path: /api/feed_source/{sourceId}
-    defaults:
-        _controller: AppBundle:Admin/FeedSource/RemoveFeedSource:remove
-    methods:
-        - DELETE
-
-nfp.entity.feed_source.list:
-    path: /api/feed_source
-    defaults:
-        _controller: AppBundle:Admin/FeedSource/ListFeedSource:list
-    methods:
-        - GET
-
-nfp.entity.feed_source.search:
-    path: /api/feed_source/search
-    defaults:
-        _controller: AppBundle:Admin/FeedSource/ListFeedSource:search
-    methods:
-        - GET
+api.feed:
+    prefix: /api/feed
+    resource: feed.yml

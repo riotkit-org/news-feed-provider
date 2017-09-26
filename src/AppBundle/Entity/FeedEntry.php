@@ -2,10 +2,10 @@
 
 namespace AppBundle\Entity;
 
-class FeedEntry
+class FeedEntry implements EntityInterface
 {
     /**
-     * @var string $newsId Id of external content, used to check i the news was already added
+     * @var string $newsId Id of external content, used to check if the news was already added
      */
     protected $newsId;
 
@@ -50,12 +50,18 @@ class FeedEntry
     protected $tags = [];
 
     /**
+     * @var string $icon
+     */
+    protected $icon = '';
+
+    /**
      * Creates an instance (allows to keep the entity immutable)
      *
      * @param array $attributes
      * @return FeedEntry
      */
-    public static function create(array $attributes) : FeedEntry {
+    public static function create(array $attributes) : FeedEntry
+    {
         $feed = new self();
 
         foreach ($attributes as $attributeName => $value) {
@@ -179,5 +185,62 @@ class FeedEntry
     public function __toString(): string
     {
         return 'FeedEntry:' . $this->getNewsId();
+    }
+
+    public function getId(): string
+    {
+        return $this->getNewsId();
+    }
+
+    public static function getPublicTypeName(): string
+    {
+        return 'feed';
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'news_id'         => $this->getNewsId(),
+            'title'           => $this->getTitle(),
+            'content'         => $this->getContent(),
+            'collection_date' => $this->getCollectionDate()->format('Y-m-d H:i:s'),
+            'date'            => $this->getDate()->format('Y-m-d H:i:s'),
+            'language'        => $this->getLanguage(),
+            FeedSource::getPublicTypeName() => $this->getFeedSource()->getId(),
+            'tags'            => $this->getTags(),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelations(): array
+    {
+        return [
+            FeedSource::getPublicTypeName() => [
+                $this->getFeedSource()->getId() => $this->getFeedSource(),
+            ],
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return $this->icon;
+    }
+
+    /**
+     * @param string $icon
+     * @return FeedEntry
+     */
+    public function setIcon(string $icon): FeedEntry
+    {
+        $this->icon = $icon;
+        return $this;
     }
 }

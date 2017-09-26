@@ -11,6 +11,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class FeedSourceRepository extends EntityRepository
 {
+    use SearchCriteriaSupporting;
+
     /**
      * Find all entries that are good to collect
      * data from
@@ -26,8 +28,34 @@ class FeedSourceRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findBySearchCriteria(FeedSourceSearchCriteria $criteria)
+    /**
+     * @param FeedSourceSearchCriteria $criteria
+     * @param string $newsBoardId
+     *
+     * @return FeedSource[]
+     */
+    public function findBySearchCriteria(FeedSourceSearchCriteria $criteria, string $newsBoardId) : array
     {
+        $qb = $this->createQueryBuilder('f');
+        $qb->andWhere('f.newsBoard = :newsBoardId');
+        $qb->setParameter('newsBoardId', $newsBoardId);
 
+        $this->applyCriteriaToQueryBuilder($criteria, $qb, 'f');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param string $boardId
+     *
+     * @return FeedSource[]
+     */
+    public function findAllByBoardId(string $boardId)
+    {
+        $qb = $this->createQueryBuilder('f');
+        $qb->where('f.newsBoard.id = :boardId');
+        $qb->setParameter('boardId', $boardId);
+
+        return $qb->getQuery()->getResult();
     }
 }
