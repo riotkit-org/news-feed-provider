@@ -25,7 +25,8 @@ class RssCollector implements CollectorInterface
 
     public function __construct(
         Reader $reader,
-        RssSpecificationFactory $specificationFactory
+        RssSpecificationFactory $specificationFactory,
+        PageSpider $spider
     ) {
         $this->reader = $reader;
         $this->specificationFactory = $specificationFactory;
@@ -84,10 +85,11 @@ class RssCollector implements CollectorInterface
             'date'           => DateTimeImmutable::createFromMutable($item->getPublishedDate()),
             'collectionDate' => new DateTimeImmutable('now'),
             'language'       => $item->getLanguage() ? $item->getLanguage() : $feedSource->getDefaultLanguage(),
+            'icon'           => $this->findIcon($item, $feedSource),
         ]);
     }
 
-    protected function getId(Item $item) : string
+    protected function getId(Item $item): string
     {
         $url = $item->getUrl();
         $guid = $item->getTag('guid', 'isPermaLink=true');
@@ -99,8 +101,13 @@ class RssCollector implements CollectorInterface
         return hash('sha256', $url);
     }
 
-    protected function createParameters(FeedSource $source) : RssSourceSpecification
+    protected function createParameters(FeedSource $source): RssSourceSpecification
     {
         return $this->specificationFactory->create($source->getSourceSpecification());
+    }
+
+    protected function findIcon(Item $item, FeedSource $source): string
+    {
+
     }
 }

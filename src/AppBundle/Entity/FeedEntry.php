@@ -30,7 +30,7 @@ class FeedEntry implements EntityInterface
     protected $sourceUrl;
 
     /**
-     * @var \DateTime $date News date (not the date when collected)
+     * @var \DateTimeImmutable $date News date (not the date when collected)
      */
     protected $date;
 

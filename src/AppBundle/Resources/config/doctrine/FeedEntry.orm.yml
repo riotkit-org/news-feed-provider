@@ -43,6 +43,10 @@ AppBundle\Entity\FeedEntry:
             type: json_array
             column: tags
 
+        icon:
+            type: string
+            column: icon
+
     manyToOne:
         feedSource:
             targetEntity: AppBundle\Entity\FeedSource
