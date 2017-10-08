@@ -21,6 +21,7 @@ class HarvestingMachinePass implements CompilerPassInterface
 
         $machine = new Definition(HarvestingMachine::class);
         $machine->addArgument(new Reference(FeedManager::class));
+        $machine->addArgument(new Reference('logger'));
         $machine->addMethodCall('setCollectors', [$collectors]);
 
         $container->setDefinition(HarvestingMachine::class, $machine);

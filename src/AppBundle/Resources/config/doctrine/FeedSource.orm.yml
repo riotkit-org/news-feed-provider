@@ -20,6 +20,12 @@ AppBundle\Entity\FeedSource:
             type: json
             column: source_data
 
+        scrapingSpecification:
+            type: json
+            column: scraping_specification
+            options:
+                default: '{}'
+
         defaultLanguage:
             type: string
             length: 3
@@ -41,6 +47,11 @@ AppBundle\Entity\FeedSource:
             type: boolean
             options:
                 default: true
+
+        icon:
+            type: string
+            column: icon
+            nullable: true
 
 
     manyToOne:

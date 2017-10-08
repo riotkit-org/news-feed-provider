@@ -1,0 +1,183 @@
+{
+	"variables": [],
+	"info": {
+		"name": "News Feed Provider",
+		"_postman_id": "9f2758c4-7fe4-788b-e0ec-34d747323bf0",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/news_board/create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var response = JSON.parse(responseBody);",
+							"",
+							"// test the response",
+							"tests[\"Has valid entity type\"] = response.data.type === 'newsboard';",
+							"",
+							"tests[\"Has submited custom id\"] = response.data.id === 'federacja';",
+							"",
+							"tests[\"Attribute 'name' is valid\"] = response.data.attributes.name === 'Federacja Anarchistyczna';",
+							"",
+							"tests[\"Attribute 'description'\"] = response.data.attributes.description === \"Działająca na terenie Polski federacja grup anarchistycznych. Istniejąca od 1988 roku (początkowo jako Międzymiastówka Anarchistyczna). Dąży do „stworzenia samorządnego społeczeństwa, tworzonego na zasadzie dobrowolności”\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8000/api/news_board/create",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"federacja\",\n    \"name\": \"Federacja Anarchistyczna\",\n    \"description\": \"Działająca na terenie Polski federacja grup anarchistycznych. Istniejąca od 1988 roku (początkowo jako Międzymiastówka Anarchistyczna). Dąży do „stworzenia samorządnego społeczeństwa, tworzonego na zasadzie dobrowolności”\"\n} "
+				},
+				"description": "Create a board where you SUBSCRIBE feed sources."
+			},
+			"response": []
+		},
+		{
+			"name": "/api/feed_source/newsBoard-federacja/create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var response = JSON.parse(responseBody);",
+							"",
+							"tests[\"Successful POST request\"] =",
+							"    responseCode.code === 200 || responseCode.code === 201 || responseCode.code === 202;",
+							"    ",
+							"tests[\"Has entity\"] = response.data.length > 0;",
+							"",
+							"tests[\"Entity has custom id\"] = response.data.id === 'fa-wroclaw' && response.data.attributes.id === 'fa-wroclaw';",
+							"",
+							"tests[\"Entity has valid type\"] = response.data.type === 'feedsource';",
+							"",
+							"tests[\"Has source data specified\"] = response.data.attributes.source_data.url === 'http://wolnywroclaw.pl/feed/';",
+							"",
+							"tests['Has the scraping specification'] = response.data.attributes.scraping_specification.length === 2;",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8000/api/feed_source/newsBoard-federacja/create",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"fa-wroclaw\",\n    \"title\": \"FA Wrocław\",\n    \"collectorName\": \"rss\",\n    \"sourceData\": {\n        \"url\": \"http://wolnywroclaw.pl/feed/\"\n    },\n    \"defaultLanguage\": \"pl\",\n    \"description\": \"Federacja Anarchistyczna - sekcja Wrocław\",\n    \"enabled\": true,\n    \"scrapingSpecification\": {\n        \"removePaths\": [\n            \"//*[@id='main-content']/article/div[1]/div\"\n        ],\n        \n        \"contentPath\": \"//*[@id='main-content']/article/div[1]\"\n    }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/api/feed_source/newsBoard-federacja/create #2",
+			"request": {
+				"url": "http://localhost:8000/api/feed_source/newsBoard-federacja/create",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"fa-krakow\",\n    \"title\": \"FA Kraków\",\n    \"collectorName\": \"rss\",\n    \"sourceData\": {\n        \"url\": \"https://fakrakow.wordpress.com/feed/\"\n    },\n    \"defaultLanguage\": \"pl\",\n    \"description\": \"Federacja Anarchistyczna - sekcja Kraków\",\n    \"enabled\": true\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/api/feed_source/search/newsBoard-federacja",
+			"request": {
+				"url": "http://localhost:8000/api/feed_source/newsBoard-federacja/search",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"FA\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/api/feed_source/search/newsBoard-federacja",
+			"request": {
+				"url": "http://localhost:8000/api/feed_source/newsBoard-federacja/search",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Wrocław\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/public/api/feed/federacja/browse/1/5",
+			"request": {
+				"url": "http://localhost:8000/public/api/feed/federacja/browse/1/20",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lanaguage\": [\"pl\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/public/api/feed/federacja/browse/1/5 (with source exclusion)",
+			"request": {
+				"url": "http://localhost:8000/public/api/feed/federacja/browse/1/20",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lanaguage\": [\"pl\"],\n    \"exceptFeedSource\": [\"fa-wroclaw\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/public/api/feed/search/help",
+			"request": {
+				"url": "http://localhost:8000/public/api/feed/search/help",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lanaguage\": [\"pl\"],\n    \"exceptFeedSource\": [\"fa-wroclaw\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/public/api/feed/federacja/timeline/months",
+			"request": {
+				"url": "http://localhost:8000/public/api/feed/federacja/timeline/months",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lanaguage\": [\"pl\"],\n    \"exceptFeedSource\": [\"fa-wroclaw\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

@@ -72,3 +72,17 @@ services:
         public: true
         arguments:
             $persistentObjectName: "AppBundle\\Entity\\NewsBoard"
+
+    AppBundle\Service\Spider\WebSpider:
+        class: AppBundle\Service\Spider\WebSpider
+        arguments:
+            - '@GuzzleHttp\Client'
+
+    GuzzleHttp\Client:
+        class: GuzzleHttp\Client
+
+    AppBundle\Event\Subscriber\Spider\ScrapeFullContentEventSubscriber:
+        class: AppBundle\Event\Subscriber\Spider\ScrapeFullContentEventSubscriber
+        public: false
+        tags:
+            - kernel.event_subscriber

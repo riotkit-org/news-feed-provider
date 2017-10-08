@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller\Admin;
 
+use AppBundle\Exception\DuplicatedDataException;
 use AppBundle\ValueObject\Response\EntityCreatedResponse;
+use AppBundle\ValueObject\Response\FailureResponse;
 use AppBundle\ValueObject\Response\ValidationFailedResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
@@ -14,16 +16,29 @@ abstract class EntityFormController extends Controller
     {
         $entity = $this->createEntity($request);
         $form = $this->createForm($this->getFormTypeName(), $entity);
-        $form->submit(json_decode($request->getContent(), true));
+        $form->submit($this->decodeRequest($request));
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->performSave($entity);
+
+            try {
+                $this->performSave($entity);
+
+            } catch (DuplicatedDataException $exception) {
+                return new FailureResponse([
+                    'id' => 'Duplicated value, a record with this id already exists',
+                ]);
+            }
 
             return $this->createValidResponse($entity);
         }
 
         $this->onValidationFailure($entity);
         return $this->createValidationFailedResponse($form);
+    }
+
+    protected function decodeRequest(Request $request): array
+    {
+        return json_decode($request->getContent(), true);
     }
 
     protected function createValidResponse($entity)

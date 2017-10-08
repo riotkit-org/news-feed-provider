@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\LanguageType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -42,6 +43,11 @@ class FeedSourceFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // optionally there is a possibility to submit own id
+        $builder->add('id', TextType::class, [
+            'required' => false,
+        ]);
+
         $builder->add('collectorName', ChoiceType::class, [
             'required' => true,
             'choices' => $this->collectors->getNames(),
@@ -59,7 +65,7 @@ class FeedSourceFormType extends AbstractType
 
         $builder->add('sourceData', TextType::class, [
             'empty_data' => '{}',
-            'required' => true,
+            'required'   => true,
         ]);
 
         $builder->add('defaultLanguage', LanguageType::class, [
@@ -74,6 +80,16 @@ class FeedSourceFormType extends AbstractType
 
         $builder->add('enabled', CheckboxType::class, [
             'empty_data' => false,
+        ]);
+
+        $builder->add('icon', UrlType::class, [
+            'empty_data' => '',
+            'required'   => false,
+        ]);
+
+        $builder->add('scrapingSpecification', TextType::class, [
+            'empty_data' => [],
+            'required'   => false,
         ]);
 
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {

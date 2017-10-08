@@ -48,3 +48,10 @@ doctrine:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+
+        mappings:
+            FileRepositoryBundle:
+                type: yml
+                prefix: Wolnosciowiec\FileRepositoryBundle
+                dir: Resources/config/doctrine
+                alias: FileRepositoryBundle

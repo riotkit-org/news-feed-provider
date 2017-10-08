@@ -15,6 +15,17 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AddFeedSourceController extends EntityFormController
 {
+    /**
+     * @var string $boardId Per request board id
+     */
+    protected $boardId;
+
+    public function submitFeedSourceAction(Request $request, string $boardId)
+    {
+        $this->boardId = $boardId;
+        return parent::submitAction($request);
+    }
+
     protected function getFormTypeName() : string
     {
         return FeedSourceFormType::class;
@@ -25,10 +36,17 @@ class AddFeedSourceController extends EntityFormController
         return new FeedSource();
     }
 
+    protected function decodeRequest(Request $request): array
+    {
+        $decoded = parent::decodeRequest($request);
+        $decoded['newsBoard'] = $this->boardId;
+
+        return $decoded;
+    }
+
     protected function performSave($entity)
     {
-        $this->getManager()->persist($entity);
-        $this->getManager()->flush($entity);
+        $this->getManager()->store($entity);
     }
 
     private function getManager() : FeedSourceManager

@@ -19,6 +19,9 @@ AppBundle\Entity\FeedEntry:
         content:
             type: text
 
+        fullContent:
+            type: text
+
         sourceUrl:
             type: string
             length: 254
@@ -46,6 +49,7 @@ AppBundle\Entity\FeedEntry:
         icon:
             type: string
             column: icon
+            nullable: true
 
     manyToOne:
         feedSource:

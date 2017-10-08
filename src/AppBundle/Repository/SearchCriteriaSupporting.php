@@ -41,6 +41,9 @@ trait SearchCriteriaSupporting
             } elseif (in_array($handler, [SearchCriteriaInterface::HANDLER_DATE_RANGE_FROM, SearchCriteriaInterface::HANDLER_DATE_RANGE_TO], true)) {
                 $this->handleDateValue($definition, $criteria, $qb, $alias);
                 continue;
+
+            } elseif ($handler === SearchCriteriaInterface::HANDLER_NONE) {
+                continue;
             }
 
             throw new LogicException(get_class($criteria) . ' uses unknown handler');
@@ -50,19 +53,24 @@ trait SearchCriteriaSupporting
     protected function handleDateValue(array $definition, SearchCriteriaInterface $criteria, QueryBuilder $qb, string $alias)
     {
         /** @var \DateTime $value */
-        $value    = $this->getFieldValue($definition['name'], $criteria);
+        $value    = $this->getFieldValue($definition, $criteria);
         $operator = $definition['handler'] === SearchCriteriaInterface::HANDLER_DATE_RANGE_FROM ? ' > ' : ' < ';
 
         if ($this->isValueEmpty($value)) {
             return;
         }
 
-        $qb->andWhere($alias . $definition['name'] . $operator . ' "' . $value->format('Y-m-d H:i:s') . '"');
+        $qb->andWhere(
+            $this->applyExclusion(
+                $definition,
+                $alias . $this->getFieldColumn($definition) . $operator . ' "' . $value->format('Y-m-d H:i:s') . '"'
+            )
+        );
     }
 
     protected function handleMultipleValue(array $definition, SearchCriteriaInterface $criteria, QueryBuilder $qb, string $alias)
     {
-        $value = $this->getFieldValue($definition['name'], $criteria);
+        $value = $this->getFieldValue($definition, $criteria);
 
         if ($this->isValueEmpty($value)) {
             return;
@@ -70,13 +78,18 @@ trait SearchCriteriaSupporting
 
         $bindParameterName = 'sc_' . $definition['name'];
 
-        $qb->andWhere($alias . $definition['name'] . ' IN (:' . $bindParameterName . ')');
+        $qb->andWhere(
+            $this->applyExclusion(
+                $definition,
+                $alias . $this->getFieldColumn($definition) . ' IN (:' . $bindParameterName . ')'
+            )
+        );
         $qb->setParameter($bindParameterName, $value);
     }
 
     protected function handleContainsValue(array $definition, SearchCriteriaInterface $criteria, QueryBuilder $qb, string $alias)
     {
-        $value = $this->getFieldValue($definition['name'], $criteria);
+        $value = $this->getFieldValue($definition, $criteria);
 
         if ($this->isValueEmpty($value)) {
             return;
@@ -84,21 +97,44 @@ trait SearchCriteriaSupporting
 
         $bindParameterName = 'sc_' . $definition['name'];
 
-        $qb->andWhere($alias . $definition['name'] . ' LIKE :' . $bindParameterName);
+        $qb->andWhere(
+            $this->applyExclusion(
+                $definition,
+                $alias . $this->getFieldColumn($definition) . ' LIKE :' . $bindParameterName
+            )
+        );
         $qb->setParameter($bindParameterName, '%' . $value . '%');
+    }
+
+    /**
+     * Applies exclusion operator if was specified in definition
+     *
+     * @param array  $definition
+     * @param string $wherePart
+     * @return string
+     */
+    protected function applyExclusion(array $definition, string $wherePart)
+    {
+        if ($definition['except'] ?? false) {
+            $wherePart = ' not (' . $wherePart . ')';
+        }
+
+        return $wherePart;
     }
 
     /**
      * Executes a getter on a Search Criteria object
      *
-     * @param string $fieldName
+     * @param array $definition
      * @param SearchCriteriaInterface $criteria
      * @throws InvalidFieldNameException
      *
      * @return mixed
      */
-    protected function getFieldValue(string $fieldName, SearchCriteriaInterface $criteria)
+    protected function getFieldValue(array $definition, SearchCriteriaInterface $criteria)
     {
+        $fieldName = $definition['name'];
+
         $methodsStr = [];
         $methodNames = [
             'get' . ucfirst($fieldName),
@@ -114,6 +150,11 @@ trait SearchCriteriaSupporting
         }
 
         throw new InvalidFieldNameException('Expected at least one of methods ' . implode(', ', $methodsStr) . 'to be implemented as a class method');
+    }
+
+    protected function getFieldColumn(array $definition): string
+    {
+        return $definition['column'] ?? $definition['name'];
     }
 
     private function isValueEmpty($value)

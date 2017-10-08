@@ -5,6 +5,7 @@ namespace AppBundle\Repository;
 use AppBundle\Entity\FeedSource;
 use AppBundle\Form\Model\FeedSourceSearchCriteria;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method FeedSource|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,8 +15,7 @@ class FeedSourceRepository extends EntityRepository
     use SearchCriteriaSupporting;
 
     /**
-     * Find all entries that are good to collect
-     * data from
+     * Find all entries that are good to collect data from
      *
      * @return FeedSource[]
      */
@@ -41,6 +41,7 @@ class FeedSourceRepository extends EntityRepository
         $qb->setParameter('newsBoardId', $newsBoardId);
 
         $this->applyCriteriaToQueryBuilder($criteria, $qb, 'f');
+        $this->applySortingCriteria($qb);
 
         return $qb->getQuery()->getResult();
     }
@@ -56,6 +57,14 @@ class FeedSourceRepository extends EntityRepository
         $qb->where('f.newsBoard.id = :boardId');
         $qb->setParameter('boardId', $boardId);
 
+        $this->applySortingCriteria($qb);
         return $qb->getQuery()->getResult();
+    }
+
+    protected function applySortingCriteria(QueryBuilder $qb)
+    {
+        $qb->addOrderBy('f.title', 'ASC');
+        $qb->addOrderBy('f.id', 'ASC');
+        $qb->addOrderBy('f.newsBoard', 'ASC');
     }
 }

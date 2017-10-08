@@ -6,6 +6,7 @@ use AppBundle\Collection\FeedCollection;
 use AppBundle\Entity\FeedEntry;
 use AppBundle\Entity\FeedSource;
 use AppBundle\Exception\DuplicatedDataException;
+use AppBundle\Service\Spider\WebSpider;
 use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
 use AppBundle\Service\Collector\CollectorInterface;
 use RssSupportBundle\ValueObject\Specification\RssSourceSpecification;
@@ -20,16 +21,29 @@ use DateTimeImmutable;
  */
 class RssCollector implements CollectorInterface
 {
+    /**
+     * @var Reader $reader
+     */
     protected $reader;
+
+    /**
+     * @var RssSpecificationFactory $specificationFactory
+     */
     protected $specificationFactory;
+
+    /**
+     * @var WebSpider $webSpider
+     */
+    protected $webSpider;
 
     public function __construct(
         Reader $reader,
         RssSpecificationFactory $specificationFactory,
-        PageSpider $spider
+        WebSpider $spider
     ) {
         $this->reader = $reader;
         $this->specificationFactory = $specificationFactory;
+        $this->webSpider = $spider;
     }
 
     public function collect(FeedSource $source) : FeedCollection
@@ -56,19 +70,19 @@ class RssCollector implements CollectorInterface
         return $feeds;
     }
 
-    public function isAbleToHandle(FeedSource $source) : bool
+    public function isAbleToHandle(FeedSource $source): bool
     {
         return $source->getCollectorName() === 'rss';
     }
 
-    public static function getCollectorName() : string
+    public static function getCollectorName(): string
     {
         return 'rss';
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
-        return self::getCollectorName();
+        return 'Collector:' . self::getCollectorName();
     }
 
     protected function parseFeedItem(
@@ -106,8 +120,23 @@ class RssCollector implements CollectorInterface
         return $this->specificationFactory->create($source->getSourceSpecification());
     }
 
+    /**
+     * Find a icon for the entry
+     *
+     * @param Item $item
+     * @param FeedSource $source
+     *
+     * @return string
+     */
     protected function findIcon(Item $item, FeedSource $source): string
     {
+        $spider = $this->webSpider->open($item->getUrl());
+        $itemImage = $spider->findPageMainImage();
 
+        if (!$itemImage) {
+            return $source->getIcon();
+        }
+
+        return $itemImage;
     }
 }

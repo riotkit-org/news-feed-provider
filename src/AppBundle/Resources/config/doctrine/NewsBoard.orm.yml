@@ -19,6 +19,11 @@ AppBundle\Entity\NewsBoard:
             type: string
             length: 256
 
+        icon:
+            type: string
+            column: icon
+            nullable: true
+
 
     oneToMany:
         feedSources:

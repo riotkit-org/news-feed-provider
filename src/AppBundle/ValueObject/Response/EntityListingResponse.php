@@ -9,19 +9,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class EntityListingResponse extends JsonResponse
 {
     /**
-     * @param EntityInterface[] $entities
+     * @param EntityInterface[] $objects
      * @param array $headers
      * @param PaginationInformation|null $pagination
      */
-    public function __construct(array $entities, array $headers = [], PaginationInformation $pagination = null)
+    public function __construct(array $objects, array $headers = [], PaginationInformation $pagination = null)
     {
         $data = [
-            'data' => array_map([$this, 'transformEntityToArray'], $entities),
+            'data' => array_map([$this, 'transformEntityToArray'], $objects),
             'relations' => [],
         ];
 
         $data = $this->applyPagination($data, $pagination);
-        $data = $this->applyRelations($data, $entities);
+        $data = $this->applyRelations($data, $objects);
 
         parent::__construct($data, 200, $headers, false);
     }

@@ -8,6 +8,7 @@ interface SearchCriteriaInterface
     const HANDLER_CONTAINS_VALUE  = 'contains-value';
     const HANDLER_DATE_RANGE_FROM = 'date-range-from';
     const HANDLER_DATE_RANGE_TO   = 'date-range-to';
+    const HANDLER_NONE            = 'none';
 
     /**
      *   return [

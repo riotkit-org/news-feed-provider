@@ -7,6 +7,7 @@ use AppBundle\Collection\FeedCollection;
 use AppBundle\Entity\FeedSource;
 use AppBundle\Manager\FeedManager;
 use AppBundle\Service\Collector\CollectorInterface;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -15,21 +16,27 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class HarvestingMachine
 {
-    const ENTRIES_BUFFER = 50;
+    const MAX_ENTRIES_BUFFER_SIZE = 50;
 
     /**
      * @var CollectorCollection $collectors
      */
-    private $collectors;
+    protected $collectors;
 
     /**
      * @var FeedManager $manager
      */
-    private $manager;
+    protected $manager;
 
-    public function __construct(FeedManager $manager)
+    /**
+     * @var Logger $logger
+     */
+    protected $logger;
+
+    public function __construct(FeedManager $manager, Logger $logger)
     {
         $this->manager = $manager;
+        $this->logger  = $logger;
     }
 
     /**
@@ -51,21 +58,22 @@ class HarvestingMachine
                     $output,
                     'An exception occurred while collecting data from ' . $feedSource .
                     ', details: ' . $exception->getMessage(),
-                    [$collector, $feedSource]
+                    [(string) $collector, (string) $feedSource, $exception]
                 );
 
                 continue;
             }
 
-            $this->logCurrentState($output, 'Buffer size is ' . $feeds->count(), [$collector, $feedSource]);
+            $this->logCurrentState($output, 'Buffer size is ' . $feeds->count(), [(string) $collector, (string) $feedSource]);
 
             // commit every X entries in a transaction
             $this->commit($feeds, false);
+            $this->logCurrentState($output, 'Commiting ' . $feeds->count() . ' feeds, buffer max size: ' . self::MAX_ENTRIES_BUFFER_SIZE);
         }
 
         if (!$feeds->isEmpty()) {
-            $this->logCurrentState($output, 'Finishing, remaining ' . $feeds->count() . ' elements');
             $this->commit($feeds, true);
+            $this->logCurrentState($output, 'Finishing, remaining ' . $feeds->count() . ' elements');
         }
     }
 
@@ -87,7 +95,7 @@ class HarvestingMachine
         $this->collectors = new CollectorCollection($collectors);
     }
 
-    private function logCurrentState(
+    protected function logCurrentState(
         OutputInterface $output = null,
         string $message,
         array $contextObjects = []
@@ -96,18 +104,14 @@ class HarvestingMachine
             return;
         }
 
-        if (count($contextObjects) > 0) {
-            $message = '[' . implode('] [', $contextObjects) . '] ' . $message;
-        }
-
         $message = '[' . date('Y-m-d H:i:s') . '] ' . $message;
 
-        $output->writeln($message);
+        $this->logger->info($message, $contextObjects);
     }
 
-    private function commit(FeedCollection $feeds, bool $force)
+    protected function commit(FeedCollection $feeds, bool $force)
     {
-        if ($force === true || $feeds->count() >= self::ENTRIES_BUFFER) {
+        if ($force === true || $feeds->count() >= self::MAX_ENTRIES_BUFFER_SIZE) {
             $this->manager->push($feeds);
             $feeds->clear();
         }

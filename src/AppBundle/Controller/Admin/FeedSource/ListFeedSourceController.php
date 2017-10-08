@@ -8,9 +8,8 @@ use AppBundle\Manager\FeedSourceManager;
 use AppBundle\ValueObject\Response\EntityListingResponse;
 use AppBundle\ValueObject\Response\SearchFieldsDescriptionResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\{
-    Request, Response
-};
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @see FeedSource

@@ -2,6 +2,9 @@
 
 namespace AppBundle\Entity;
 
+/**
+ * Represents a entry eg. a news, article
+ */
 class FeedEntry implements EntityInterface
 {
     /**
@@ -23,6 +26,11 @@ class FeedEntry implements EntityInterface
      * @var string $content
      */
     protected $content;
+
+    /**
+     * @var string $fullContent
+     */
+    protected $fullContent;
 
     /**
      * @var string $sourceUrl
@@ -192,40 +200,6 @@ class FeedEntry implements EntityInterface
         return $this->getNewsId();
     }
 
-    public static function getPublicTypeName(): string
-    {
-        return 'feed';
-    }
-
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return [
-            'news_id'         => $this->getNewsId(),
-            'title'           => $this->getTitle(),
-            'content'         => $this->getContent(),
-            'collection_date' => $this->getCollectionDate()->format('Y-m-d H:i:s'),
-            'date'            => $this->getDate()->format('Y-m-d H:i:s'),
-            'language'        => $this->getLanguage(),
-            FeedSource::getPublicTypeName() => $this->getFeedSource()->getId(),
-            'tags'            => $this->getTags(),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getRelations(): array
-    {
-        return [
-            FeedSource::getPublicTypeName() => [
-                $this->getFeedSource()->getId() => $this->getFeedSource(),
-            ],
-        ];
-    }
-
     /**
      * @return string
      */
@@ -242,5 +216,67 @@ class FeedEntry implements EntityInterface
     {
         $this->icon = $icon;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullContent(): string
+    {
+        return $this->fullContent ?? '';
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFullContent(): bool
+    {
+        return strlen($this->getFullContent()) > 0;
+    }
+
+    /**
+     * @param string $fullContent
+     * @return FeedEntry
+     */
+    public function setFullContent(string $fullContent): FeedEntry
+    {
+        $this->fullContent = $fullContent;
+        return $this;
+    }
+
+    public static function getPublicTypeName(): string
+    {
+        return 'feed';
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'news_id'         => $this->getNewsId(),
+            'title'           => $this->getTitle(),
+            'content'         => $this->getContent(),
+            'fullContent'     => $this->getFullContent(),
+            'collection_date' => $this->getCollectionDate()->format('Y-m-d H:i:s'),
+            'date'            => $this->getDate()->format('Y-m-d H:i:s'),
+            'language'        => $this->getLanguage(),
+            FeedSource::getPublicTypeName() => $this->getFeedSource()->getId(),
+            'tags'            => $this->getTags(),
+            'icon'            => $this->getIcon(),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRelations(): array
+    {
+        return [
+            FeedSource::getPublicTypeName() => [
+                $this->getFeedSource()->getId() => $this->getFeedSource(),
+            ],
+        ];
     }
 }

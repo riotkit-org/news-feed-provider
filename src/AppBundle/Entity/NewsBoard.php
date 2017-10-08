@@ -26,14 +26,21 @@ class NewsBoard implements EntityInterface
      */
     protected $feedSources;
 
+    /**
+     * @var string $icon
+     */
+    protected $icon;
+
     public static function create(
         string $name,
-        string $description
+        string $description,
+        string $icon = ''
     ) : NewsBoard {
 
         $board = new self();
         $board->name = $name;
         $board->description = $description;
+        $board->icon = $icon;
 
         return $board;
     }
@@ -82,9 +89,27 @@ class NewsBoard implements EntityInterface
         return $this;
     }
 
-    public function setId(string $id): NewsBoard
+    public function setId(string $id = null): NewsBoard
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return $this->icon ?? '';
+    }
+
+    /**
+     * @param string $icon
+     * @return NewsBoard
+     */
+    public function setIcon($icon): NewsBoard
+    {
+        $this->icon = $icon;
         return $this;
     }
 

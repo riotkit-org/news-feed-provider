@@ -17,6 +17,8 @@ class FeedEntrySearchCriteria implements SearchCriteriaInterface
     protected $dateTo;
     protected $language;
     protected $tags;
+    protected $newsBoard;
+    protected $exceptFeedSource;
 
     public function __construct(array $input)
     {
@@ -28,6 +30,8 @@ class FeedEntrySearchCriteria implements SearchCriteriaInterface
         $this->dateTo     = $input['dateTo'] ?? '';
         $this->language   = $input['language'] ?? [];
         $this->tags       = $input['tags'] ?? [];
+        $this->newsBoard  = $input['newsBoard'] ?? '';
+        $this->exceptFeedSource = $input['exceptFeedSource'] ?? [];
     }
 
     public function getDefinition() : array
@@ -66,6 +70,16 @@ class FeedEntrySearchCriteria implements SearchCriteriaInterface
                 'name' => 'dateTo',
                 'handler' => SearchCriteriaInterface::HANDLER_DATE_RANGE_TO,
                 'column' => 'date',
+            ],
+            [
+                'name' => 'newsBoard',
+                'handler' => SearchCriteriaInterface::HANDLER_NONE,
+            ],
+            [
+                'name'    => 'exceptFeedSource',
+                'handler' => SearchCriteriaInterface::HANDLER_MULTIPLE_VALUE,
+                'column'  => 'feedSource',
+                'except'  => true,
             ],
         ];
     }
@@ -132,5 +146,31 @@ class FeedEntrySearchCriteria implements SearchCriteriaInterface
     public function getTags()
     {
         return (array) $this->tags;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewsBoard(): string
+    {
+        return $this->newsBoard;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExceptFeedSource()
+    {
+        return $this->exceptFeedSource;
+    }
+
+    /**
+     * @param string[] $exceptFeedSource
+     * @return FeedEntrySearchCriteria
+     */
+    public function setExceptFeedSource($exceptFeedSource): FeedEntrySearchCriteria
+    {
+        $this->exceptFeedSource = $exceptFeedSource;
+        return $this;
     }
 }

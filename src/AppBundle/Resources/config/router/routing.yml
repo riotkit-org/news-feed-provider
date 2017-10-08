@@ -7,5 +7,5 @@ api.feed_source:
     resource: feed_source.yml
 
 api.feed:
-    prefix: /api/feed
+    prefix: /public/api/feed
     resource: feed.yml

@@ -1,7 +1,21 @@
 nfp.entity.feed_entry.browse:
-    path: /browse/{page}/{limit}
+    path: /{boardId}/browse/{page}/{limit}
     defaults:
-        _controller: AppBundle:Admin/FeedEntry/ListFeedEntry:search
+        _controller: AppBundle:FeedList:search
         page: 1
+    methods:
+        - POST
+
+nfp.entity.feed_entry.search.help:
+    path: /search/help
+    defaults:
+        _controller: AppBundle:FeedList:describeSearch
+    methods:
+        - GET
+
+nfp.entity.feed_entry.timeline.list_months:
+    path: /{boardId}/timeline/months
+    defaults:
+        _controller: AppBundle:Timeline:listMonths
     methods:
         - POST

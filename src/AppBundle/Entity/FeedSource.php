@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\ValueObject\Spider\ScrapingSpecification;
+
 class FeedSource implements EntityInterface
 {
     /**
@@ -54,6 +56,16 @@ class FeedSource implements EntityInterface
      */
     protected $enabled;
 
+    /**
+     * @var string $icon
+     */
+    protected $icon;
+
+    /**
+     * @var array $scrappingSpecification
+     */
+    protected $scrapingSpecification;
+
     public static function create(
         NewsBoard $board,
         string $collectorName,
@@ -62,8 +74,9 @@ class FeedSource implements EntityInterface
         \DateTimeImmutable $lastCollectionDate,
         bool $enabled,
         string $title,
-        string $description
-    ) : FeedSource {
+        string $description,
+        string $icon = ''
+    ): FeedSource {
 
         $feed = new self();
         $feed->newsBoard = $board;
@@ -74,6 +87,7 @@ class FeedSource implements EntityInterface
         $feed->enabled = $enabled;
         $feed->title = $title;
         $feed->description = $description;
+        $feed->icon = $icon;
 
         return $feed;
     }
@@ -81,7 +95,7 @@ class FeedSource implements EntityInterface
     /**
      * @return string
      */
-    public function getId() : string
+    public function getId(): string
     {
         return $this->id ?? '';
     }
@@ -94,51 +108,51 @@ class FeedSource implements EntityInterface
         return $this->newsBoard;
     }
 
-    public function getCollectorName() : string
+    public function getCollectorName(): string
     {
         return $this->collectorName ?? '';
     }
 
-    public function getSourceSpecification() : array
+    public function getSourceSpecification(): array
     {
         return $this->sourceData ?? [];
     }
 
-    public function getDefaultLanguage() : string
+    public function getDefaultLanguage(): string
     {
         return $this->defaultLanguage ?? '';
     }
 
-    public function getSourceData() : array
+    public function getSourceData(): array
     {
         return $this->sourceData;
     }
 
-    public function setCollectorName($collectorName) : FeedSource
+    public function setCollectorName($collectorName): FeedSource
     {
         $this->collectorName = $collectorName;
         return $this;
     }
 
-    public function setNewsBoard(NewsBoard $newsBoard) : FeedSource
+    public function setNewsBoard(NewsBoard $newsBoard): FeedSource
     {
         $this->newsBoard = $newsBoard;
         return $this;
     }
 
-    public function setSourceData($sourceData) : FeedSource
+    public function setSourceData($sourceData): FeedSource
     {
         $this->sourceData = $sourceData;
         return $this;
     }
 
-    public function setDefaultLanguage(string $defaultLanguage) : FeedSource
+    public function setDefaultLanguage(string $defaultLanguage): FeedSource
     {
         $this->defaultLanguage = $defaultLanguage;
         return $this;
     }
 
-    public static function getPublicTypeName() : string
+    public static function getPublicTypeName(): string
     {
         return 'feedsource';
     }
@@ -146,14 +160,15 @@ class FeedSource implements EntityInterface
     public function jsonSerialize()
     {
         return [
-            'id'                   => $this->getId(),
-            NewsBoard::getPublicTypeName() => $this->getNewsBoard() ? $this->getNewsBoard()->getId() : null,
-            'title'                => $this->getTitle(),
-            'description'          => $this->getDescription(),
-            'source_data'          => $this->getSourceSpecification(),
-            'collector_name'       => $this->getCollectorName(),
-            'default_language'     => $this->getDefaultLanguage(),
-            'last_collection_date' => $this->getLastCollectionDate()->format('Y-m-d H:i:s'),
+            'id'                     => $this->getId(),
+            NewsBoard::getPublicTypeName() => $this->getNewsBoard() ? $this->getNewsBoard()->getId(): null,
+            'title'                  => $this->getTitle(),
+            'description'            => $this->getDescription(),
+            'source_data'            => $this->getSourceSpecification(),
+            'collector_name'         => $this->getCollectorName(),
+            'default_language'       => $this->getDefaultLanguage(),
+            'last_collection_date'   => $this->getLastCollectionDate()->format('Y-m-d H:i:s'),
+            'scraping_specification' => $this->getScrapingSpecification(),
         ];
     }
 
@@ -177,41 +192,87 @@ class FeedSource implements EntityInterface
         return $this->lastCollectionDate ?? new \DateTime('1980-01-01');
     }
 
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->enabled ?? false;
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return 'FeedSource:' . $this->getId();
     }
 
-    public function getTitle() : string
+    public function getTitle(): string
     {
         return $this->title ?? '';
     }
 
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description ?? '';
     }
 
-    public function setEnabled(bool $enabled) : FeedSource
+    public function setEnabled(bool $enabled): FeedSource
     {
         $this->enabled = $enabled;
         return $this;
     }
 
-    public function setTitle(string $title) : FeedSource
+    public function setTitle(string $title): FeedSource
     {
         $this->title = $title;
         return $this;
     }
 
-    public function setDescription(string $description) : FeedSource
+    public function setDescription(string $description): FeedSource
     {
         $this->description = $description;
         return $this;
+    }
+
+    /**
+     * @param string $icon
+     * @return FeedSource
+     */
+    public function setIcon($icon): FeedSource
+    {
+        $this->icon = $icon;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return $this->icon ?? '';
+    }
+
+    /**
+     * @param string $id
+     * @return FeedSource
+     */
+    public function setId($id): FeedSource
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param array $scrapingSpecification
+     * @return FeedSource
+     */
+    public function setScrapingSpecification(array $scrapingSpecification)
+    {
+        $this->scrapingSpecification = $scrapingSpecification;
+        return $this;
+    }
+
+    /**
+     * @return \AppBundle\ValueObject\Spider\ScrapingSpecification
+     */
+    public function getScrapingSpecification(): ScrapingSpecification
+    {
+        return new ScrapingSpecification($this->scrapingSpecification);
     }
 }
