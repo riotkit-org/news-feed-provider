@@ -27,6 +27,7 @@
         "doctrine/orm": "^2.5",
         "ezyang/htmlpurifier": "^4.9",
         "incenteev/composer-parameter-handler": "^2.0",
+        "liip/monitor-bundle": "^2.5",
         "miniflux/picofeed": "@stable",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",

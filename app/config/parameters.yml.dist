@@ -6,14 +6,21 @@ parameters:
     database_port: ~
     database_name: symfony
     database_user: root
-    database_password: ~
     database_path: '%kernel.project_dir%/var/data/data.sqlite'
     database_driver: pdo_sqlite
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: ~
-    mailer_password: ~
 
-    # A secret key that's used to generate certain security-related tokens
+    file_repository_url: https://example.org
+    file_repository_cache_name: Void # Doctrine cache name, examples: Apcu, Void, PhpFile, Redis, Memcache, Memcached, Filesystem
+    file_repository_enabled: false
+    file_repository_tag: news-feed-provider
+
+    # Secrets
     secret: ThisTokenIsNotSoSecretChangeIt
+    monitoring_api_key: super-secret-api-key
+    file_repository_token: xxx
+    database_password: ~
+    mailer_password: ~

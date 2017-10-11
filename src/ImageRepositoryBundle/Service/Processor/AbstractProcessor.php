@@ -16,12 +16,20 @@ abstract class AbstractProcessor
     protected $logger;
     protected $enabled;
 
-    public function __construct(ImageUploader $uploader, ImageExtractor $extractor, Logger $logger, bool $isEnabled = true)
+    public function __construct(ImageUploader $uploader, ImageExtractor $extractor, Logger $logger, bool $enabled = true)
     {
         $this->uploader  = $uploader;
         $this->extractor = $extractor;
         $this->logger    = $logger;
-        $this->enabled   = $isEnabled;
+        $this->enabled   = $enabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
     }
 
     /**

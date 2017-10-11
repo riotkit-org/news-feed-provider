@@ -1,4 +1,0 @@
-file_repository:
-    cache_class: "Doctrine\\Common\\Cache\\ApcuCache"
-    url: "https://test"
-    token: ""

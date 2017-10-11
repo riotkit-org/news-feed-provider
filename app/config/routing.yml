@@ -1,2 +1,8 @@
 app:
     resource: '@AppBundle/Resources/config/router/routing.yml'
+
+_monitor:
+    resource: "@LiipMonitorBundle/Resources/config/routing.xml"
+    prefix: /{apiKey}/monitor/health
+    defaults:
+        apiKey: '%monitoring_api_key%'

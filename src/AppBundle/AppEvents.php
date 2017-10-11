@@ -4,5 +4,6 @@ namespace AppBundle;
 
 final class AppEvents
 {
-    const FEED_PRE_PERSIST = 'Feed.persist';
+    const FEED_PRE_PERSIST = 'Feed.pre-persist';
+    const FEED_SOURCE_PRE_PERSIST = 'FeedSource.pre-persist';
 }

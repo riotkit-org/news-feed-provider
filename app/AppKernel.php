@@ -8,15 +8,19 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = [
+
+            // framework bundles
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
+            // libraries
             new \Wolnosciowiec\FileRepositoryBundle\FileRepositoryBundle(),
             new \JMS\SerializerBundle\JMSSerializerBundle(),
+            new \Liip\MonitorBundle\LiipMonitorBundle(),
 
             // application bundles
             new \AppBundle\AppBundle(),
@@ -25,6 +29,7 @@ class AppKernel extends Kernel
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+            $bundles[] = new Symfony\Bundle\TwigBundle\TwigBundle();
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
@@ -55,6 +60,6 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getRootDir().'/config/config_' . $this->getEnvironment() . '.yml');
     }
 }

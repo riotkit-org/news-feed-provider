@@ -2,6 +2,7 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\AppEvents;
 use AppBundle\Entity\FeedSource;
 use AppBundle\Exception\DuplicatedDataException;
 use AppBundle\Repository\FeedSourceRepository;
@@ -9,6 +10,8 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Id\AssignedGenerator;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * @see FeedSource
@@ -25,10 +28,21 @@ class FeedSourceManager
      */
     protected $repository;
 
-    public function __construct(EntityManager $em, FeedSourceRepository $repository)
+    /**
+     * @var EventDispatcherInterface $dispatcher
+     */
+    protected $dispatcher;
+
+    /**
+     * @param EntityManager            $em
+     * @param FeedSourceRepository     $repository
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EntityManager $em, FeedSourceRepository $repository, EventDispatcherInterface $eventDispatcher)
     {
         $this->entityManager = $em;
         $this->repository    = $repository;
+        $this->dispatcher    = $eventDispatcher;
     }
 
     /**
@@ -69,6 +83,7 @@ class FeedSourceManager
 
     public function persist(FeedSource $source)
     {
+        $this->dispatcher->dispatch(AppEvents::FEED_SOURCE_PRE_PERSIST, new GenericEvent($source));
         $this->entityManager->persist($source);
     }
 

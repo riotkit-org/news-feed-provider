@@ -75,7 +75,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": \"fa-wroclaw\",\n    \"title\": \"FA Wrocław\",\n    \"collectorName\": \"rss\",\n    \"sourceData\": {\n        \"url\": \"http://wolnywroclaw.pl/feed/\"\n    },\n    \"defaultLanguage\": \"pl\",\n    \"description\": \"Federacja Anarchistyczna - sekcja Wrocław\",\n    \"enabled\": true,\n    \"scrapingSpecification\": {\n        \"removePaths\": [\n            \"//*[@id='main-content']/article/div[1]/div\"\n        ],\n        \n        \"contentPath\": \"//*[@id='main-content']/article/div[1]\"\n    }\n}"
+					"raw": "{\n    \"id\": \"fa-wroclaw\",\n    \"title\": \"FA Wrocław\",\n    \"collectorName\": \"rss\",\n    \"icon\": \"http://wolnywroclaw.pl/wp-content/uploads/2015/05/icon-555f99cdv1_site_icon-256x256.png\",\n    \"sourceData\": {\n        \"url\": \"http://wolnywroclaw.pl/feed/\"\n    },\n    \"defaultLanguage\": \"pl\",\n    \"description\": \"Federacja Anarchistyczna - sekcja Wrocław\",\n    \"enabled\": true,\n    \"scrapingSpecification\": {\n        \"removePaths\": [\n            \"//*[@id='main-content']/article/div[1]/div\"\n        ],\n        \n        \"contentPath\": \"//*[@id='main-content']/article/div[1]\"\n    }\n}"
 				},
 				"description": ""
 			},
@@ -170,6 +170,20 @@
 			"request": {
 				"url": "http://localhost:8000/public/api/feed/federacja/timeline/months",
 				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lanaguage\": [\"pl\"],\n    \"exceptFeedSource\": [\"fa-wroclaw\"]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/super-secret-api-key/monitor/health/run",
+			"request": {
+				"url": "http://localhost:8000/super-secret-api-key/monitor/health/run",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",

@@ -169,6 +169,7 @@ class FeedSource implements EntityInterface
             'default_language'       => $this->getDefaultLanguage(),
             'last_collection_date'   => $this->getLastCollectionDate()->format('Y-m-d H:i:s'),
             'scraping_specification' => $this->getScrapingSpecification(),
+            'icon'                   => $this->getIcon(),
         ];
     }
 

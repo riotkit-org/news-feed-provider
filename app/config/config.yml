@@ -2,7 +2,6 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: config.user.yml }
 
 parameters:
     locale: en
@@ -55,3 +54,20 @@ doctrine:
                 prefix: Wolnosciowiec\FileRepositoryBundle
                 dir: Resources/config/doctrine
                 alias: FileRepositoryBundle
+
+file_repository:
+    cache_class: "Doctrine\\Common\\Cache\\%file_repository_cache_name%Cache"
+    url: "%file_repository_url%"
+    token: "%file_repository_token%"
+
+liip_monitor:
+    enable_controller: true
+    checks:
+        doctrine_dbal: default
+        security_advisory:
+            lock_file: '%kernel.root_dir%/../composer.lock'
+        symfony_requirements:
+            file: '%kernel.root_dir%/../var/SymfonyRequirements.php'
+        readable_directory: ["%kernel.cache_dir%"]
+        writable_directory: ["%kernel.cache_dir%"]
+        symfony_version: ~

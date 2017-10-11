@@ -3,25 +3,28 @@
 namespace ImageRepositoryBundle\Service\Processor;
 
 use AppBundle\AppEvents;
-use AppBundle\Entity\FeedEntry;
+use AppBundle\Entity\FeedSource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
- * @see FeedEntry
+ * @see FeedSource
  */
-class FeedProcessor extends AbstractProcessor implements EventSubscriberInterface
+class FeedSourceProcessor extends AbstractProcessor implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
         return [
-            AppEvents::FEED_PRE_PERSIST => [
+            AppEvents::FEED_SOURCE_PRE_PERSIST => [
                 'process',
                 900,
-            ]
+            ],
         ];
     }
 
+    /**
+     * @param GenericEvent $event
+     */
     public function process(GenericEvent $event)
     {
         if (!$this->isEnabled()) {
@@ -29,11 +32,11 @@ class FeedProcessor extends AbstractProcessor implements EventSubscriberInterfac
         }
 
         /**
-         * @var FeedEntry $feed
+         * @var FeedSource $source
          */
-        $feed = $event->getSubject();
+        $source = $event->getSubject();
 
-        $feed->setContent($this->processText($feed->getContent()));
-        $feed->setIcon($this->processText($feed->getIcon()));
+        $source->setIcon($this->processText($source->getIcon()));
+        $source->setDescription($this->processText($source->getDescription()));
     }
 }
