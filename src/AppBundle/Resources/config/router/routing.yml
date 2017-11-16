@@ -9,3 +9,8 @@ api.feed_source:
 api.feed:
     prefix: /public/api/feed
     resource: feed.yml
+
+api.main_page:
+    path: /
+    defaults:
+        _controller: "AppBundle:Default:index"

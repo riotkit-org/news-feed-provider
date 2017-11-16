@@ -89,18 +89,22 @@ class RssCollector implements CollectorInterface
         Item $item,
         FeedSource $feedSource
     ) : FeedEntry {
-
         return FeedEntry::create([
             'newsId'         => $this->getId($item),
             'feedSource'     => $feedSource,
-            'title'          => $item->getTitle(),
-            'content'        => $item->getContent(),
+            'title'          => $this->correctEncoding($item->getTitle()),
+            'content'        => $this->correctEncoding($item->getContent()),
             'sourceUrl'      => $item->getUrl(),
             'date'           => DateTimeImmutable::createFromMutable($item->getPublishedDate()),
             'collectionDate' => new DateTimeImmutable('now'),
-            'language'       => $item->getLanguage() ? $item->getLanguage() : $feedSource->getDefaultLanguage(),
+            'language'       => $item->getLanguage() ? $this->correctEncoding($item->getLanguage()) : $feedSource->getDefaultLanguage(),
             'icon'           => $this->findIcon($item, $feedSource),
         ]);
+    }
+
+    private function correctEncoding(string $input)
+    {
+        return mb_convert_encoding($input , 'UTF-8', 'UTF-8');
     }
 
     protected function getId(Item $item): string

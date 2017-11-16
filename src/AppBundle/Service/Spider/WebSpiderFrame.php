@@ -135,9 +135,8 @@ class WebSpiderFrame
          * @var Crawler[]|\DOMElement[] $crawler
          */
         foreach ($crawler as $node) {
-
             foreach (['class', 'id'] as $propertyName) {
-                if ($node->attr($propertyName)) {
+                if ($node->hasAttribute($propertyName)) {
                     $node->removeAttribute($propertyName);
                 }
             }
