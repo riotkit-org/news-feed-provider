@@ -258,13 +258,14 @@ class FeedEntry implements EntityInterface
             'news_id'         => $this->getNewsId(),
             'title'           => $this->getTitle(),
             'content'         => $this->getContent(),
-            'fullContent'     => $this->getFullContent(),
+            'full_content'    => $this->getFullContent(),
             'collection_date' => $this->getCollectionDate()->format('Y-m-d H:i:s'),
             'date'            => $this->getDate()->format('Y-m-d H:i:s'),
             'language'        => $this->getLanguage(),
             FeedSource::getPublicTypeName() => $this->getFeedSource()->getId(),
             'tags'            => $this->getTags(),
             'icon'            => $this->getIcon(),
+            'source_url'      => $this->getSourceUrl(),
         ];
     }
 

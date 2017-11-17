@@ -59,8 +59,22 @@ class EntityListingResponse extends JsonResponse
      */
     protected function applyRelations(array $response, array $entities)
     {
+        $response['relations'] = [];
+        
         foreach ($entities as $entity) {
-            $response['relations'] = array_merge($response['relations'], $entity->getRelations());
+            $entityRelations = $entity->getRelations();
+            
+            foreach ($entityRelations as $groupName => $innerElements) {
+                // initially create a group
+                if (!isset($response['relations'][$groupName])) {
+                    $response['relations'][$groupName] = [];
+                }
+                
+                $response['relations'][$groupName] = array_merge(
+                    $response['relations'][$groupName],
+                    $innerElements
+                );
+            }
         }
 
         return $response;

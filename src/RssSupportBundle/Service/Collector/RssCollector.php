@@ -46,6 +46,15 @@ class RssCollector implements CollectorInterface
         $this->webSpider = $spider;
     }
 
+    /**
+     * @see CollectorInterface::collect()
+     * @param FeedSource $source
+     *
+     * @throws \PicoFeed\Parser\MalformedXmlException
+     * @throws \PicoFeed\Reader\UnsupportedFeedFormatException
+     *
+     * @return FeedCollection
+     */
     public function collect(FeedSource $source) : FeedCollection
     {
         $feeds = new FeedCollection();
@@ -60,7 +69,7 @@ class RssCollector implements CollectorInterface
 
         foreach ($parser->execute()->getItems() as $item) {
             try {
-                $feeds->add($this->parseFeedItem($item, $source));
+                $feeds->add($this->createFeedEntryFromRssEntry($item, $source));
 
             } catch (DuplicatedDataException $exception) {
                 // pass
@@ -70,9 +79,15 @@ class RssCollector implements CollectorInterface
         return $feeds;
     }
 
+    /**
+     * Answers a question if the collector is able to handle specified FeedSource
+     *
+     * @param FeedSource $source
+     * @return bool
+     */
     public function isAbleToHandle(FeedSource $source): bool
     {
-        return $source->getCollectorName() === 'rss';
+        return $source->getCollectorName() === $this::getCollectorName();
     }
 
     public static function getCollectorName(): string
@@ -85,7 +100,7 @@ class RssCollector implements CollectorInterface
         return 'Collector:' . self::getCollectorName();
     }
 
-    protected function parseFeedItem(
+    protected function createFeedEntryFromRssEntry(
         Item $item,
         FeedSource $feedSource
     ) : FeedEntry {
@@ -104,7 +119,7 @@ class RssCollector implements CollectorInterface
 
     private function correctEncoding(string $input)
     {
-        return mb_convert_encoding($input , 'UTF-8', 'UTF-8');
+        return mb_convert_encoding($input, 'UTF-8', 'UTF-8');
     }
 
     protected function getId(Item $item): string
