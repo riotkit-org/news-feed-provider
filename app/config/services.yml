@@ -41,6 +41,7 @@ services:
         public: true
         arguments:
             $em: "@doctrine.orm.entity_manager"
+            $repository: '@AppBundle\Repository\NewsBoardRepository'
 
     AppBundle\Manager\FeedSourceManager:
         class: AppBundle\Manager\FeedSourceManager
@@ -86,5 +87,7 @@ services:
     AppBundle\Event\Subscriber\Spider\ScrapeFullContentEventSubscriber:
         class: AppBundle\Event\Subscriber\Spider\ScrapeFullContentEventSubscriber
         public: false
+        arguments:
+            $spider: '@AppBundle\Service\Spider\WebSpider'
         tags:
             - kernel.event_subscriber

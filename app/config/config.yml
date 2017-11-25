@@ -75,4 +75,3 @@ liip_monitor:
             file: '%kernel.root_dir%/../var/SymfonyRequirements.php'
         readable_directory: ["%kernel.cache_dir%"]
         writable_directory: ["%kernel.cache_dir%"]
-        symfony_version: ~
