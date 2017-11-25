@@ -21,11 +21,6 @@ framework:
     php_errors:
         log: true
 
-# Twig Configuration
-twig:
-    debug: '%kernel.debug%'
-    strict_variables: '%kernel.debug%'
-
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -57,6 +52,13 @@ doctrine:
                 prefix: Wolnosciowiec\FileRepositoryBundle
                 dir: Resources/config/doctrine
                 alias: FileRepositoryBundle
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+    organize_migrations: false
 
 file_repository:
     cache_class: "Doctrine\\Common\\Cache\\%file_repository_cache_name%Cache"

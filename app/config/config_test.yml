@@ -8,6 +8,10 @@ framework:
     profiler:
         collect: false
 
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
 web_profiler:
     toolbar: false
     intercept_redirects: false

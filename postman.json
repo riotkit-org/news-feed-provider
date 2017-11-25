@@ -181,7 +181,7 @@
 					"raw": "{\n    \"lanaguage\": [\"pl\"]\n}"
 				},
 				"url": {
-					"raw": "{{DOMAIN}}/public/api/feed/federacja/browse/1/2",
+					"raw": "{{DOMAIN}}/public/api/feed/federacja/browse/1/5",
 					"host": [
 						"{{DOMAIN}}"
 					],
@@ -192,7 +192,7 @@
 						"federacja",
 						"browse",
 						"1",
-						"2"
+						"5"
 					]
 				}
 			},

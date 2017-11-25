@@ -48,7 +48,7 @@ services:
         arguments:
             $em: "@doctrine.orm.entity_manager"
             $repository: '@AppBundle\Repository\FeedSourceRepository'
-            $eventDispatcher: "@debug.event_dispatcher"
+            $eventDispatcher: "@event_dispatcher"
 
     AppBundle\Manager\FeedManager:
         class: AppBundle\Manager\FeedManager

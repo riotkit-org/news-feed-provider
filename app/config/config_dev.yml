@@ -1,11 +1,9 @@
 imports:
     - { resource: config.yml }
 
-doctrine:
-    orm:
-        metadata_cache_driver: apcu
-        result_cache_driver: apcu
-        query_cache_driver: apcu
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
 
 framework:
     router:

@@ -12,7 +12,7 @@ COLOR_RESET   = \033[0m
 COLOR_INFO    = \033[32m
 COLOR_COMMENT = \033[33m
 
-ENV="dev"
+ENV="prod"
 
 ## This help dialog
 help:
@@ -29,20 +29,22 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-## Create database structure first time
+## Create database structure first time (better use migrations)
 setup_database_first_time:
 	printf " >> Creating the database"
 	./bin/console doctrine:database:create --env=${ENV} 2>/dev/null || true
 	./bin/console doctrine:schema:create --env=${ENV}
-	make migrate
 
 ## Build the application by running preparation tasks such as composer install
 build:
 	composer install --dev
-	php ./bin/console cache:warmup
+	php ./bin/console cache:warmup --env=${ENV}
 
 ## Migrate the database
 migrate:
-	./bin/console doctrine:migrations:migrate -vv -n
+	./bin/console doctrine:migrations:migrate -vv -n --env=${ENV}
 
-
+## Prepare the application to be ready to run
+deploy:
+	make build
+	make migrate

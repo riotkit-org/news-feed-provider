@@ -8,6 +8,7 @@ parameters:
     database_user: root
     database_path: '%kernel.project_dir%/var/data/data.sqlite'
     database_driver: pdo_sqlite
+    doctrine_orm_cache: void
 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
