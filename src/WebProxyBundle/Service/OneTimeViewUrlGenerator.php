@@ -68,7 +68,7 @@ class OneTimeViewUrlGenerator
         $token = [
             'url'          => $url,
             'expires'      => (new \DateTime('now'))->modify('+' . $this->expirationTimeInMinutes . ' minutes')->format('Y-m-d H:i:s'),
-            'processs'     => $this->process,
+            'process'      => $this->process,
             'stripHeaders' => ['X-Frame-Options']
         ];
 
