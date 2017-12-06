@@ -7,6 +7,7 @@
             "AppBundle\\": "src/AppBundle",
             "RssSupportBundle\\": "src/RssSupportBundle",
             "ImageRepositoryBundle\\": "src/ImageRepositoryBundle",
+            "WebProxyBundle\\": "src/WebProxyBundle",
             "Application\\Migrations\\": "app/DoctrineMigrations"
         },
         "classmap": [
@@ -24,6 +25,7 @@
     },
     "require": {
         "php": ">=7.0",
+        "blocktrail/cryptojs-aes-php": "^0.1.0",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-migrations-bundle": "^1.3",
         "doctrine/orm": "^2.5",

@@ -25,3 +25,10 @@ parameters:
     file_repository_token: xxx
     database_password: ~
     mailer_password: ~
+
+    # web-proxy
+    webproxy_url: ""
+    webproxy_passphrase: ""
+    webproxy_process: true
+    webproxy_expiration_minutes: 1
+    webproxy_enabled_ssl: false

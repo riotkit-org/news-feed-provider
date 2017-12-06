@@ -124,6 +124,28 @@ the service itself handles de-duplication, caching and of course storing the fil
 To enable the integration simply only all paramters in `parameters.yml` needs to be filled up properly,
 the rest is handled by the `ImageRepositoryBundle`.
 
+#### Web-Proxy integration
+
+When links to the articles does not have SSL it is possible to use a `Wolnościowiec Web-Proxy` to generate urls secured with SSL.
+The `web-proxy` service is available here: https://github.com/Wolnosciowiec/web-proxy
+
+Example case:
+1. We have a source url to the article: `http://wolnywroclaw.pl/relacje/protest-lokatorow-z-ul-slicznej-i-zaulka-rogozinskiego-wideo/`
+2. But... our site has SSL, to render the article in iframe we call the `web-proxy`
+3. The webproxy returns: `https://some-proxy.services.someservice.org/?__wp_one_time_token=YT323DEe21FAFAFAZSP1312161F234ewfADSy65Efre4RE23EDW312gtrhtr6`
+4. Embedding the URL from the `web-proxy` allows to render correctly the page through our `web-proxy` server
+
+Enabling:
+
+```
+# web-proxy
+webproxy_url: "https://some-proxy.services.someservice.org"
+webproxy_passphrase: "my-super-secret-passphrase-from-webproxy-service"
+webproxy_process: true # process HTML and CSS content, so all static content will be rendered by the proxy
+webproxy_expiration_minutes: 1
+webproxy_enabled_ssl: true
+```
+
 #### Health checking
 
 There is an endpoint that shows the application health, it's placed under `{{DOMAIN}}/{{HEALTH_CHECK_API_KEY}}/monitor/health/run`

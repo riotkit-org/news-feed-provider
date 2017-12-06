@@ -4,12 +4,15 @@ namespace Tests\AppBundle\Service;
 
 use AppBundle\Entity\FeedSource;
 use AppBundle\Entity\NewsBoard;
+use AppBundle\Service\Spider\WebSpider;
+use GuzzleHttp\Psr7\Response;
 use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
 use AppBundle\Manager\FeedManager;
-use AppBundle\Repository\FeedRepository;
 use RssSupportBundle\Service\Collector\RssCollector;
 use AppBundle\Service\HarvestingMachine;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tests\TestCase;
 
 /**
@@ -23,14 +26,16 @@ class HarvestingMachineTest extends TestCase
     public function commits_data_when_single_entry()
     {
         $manager = $this->createManager();
-        $machine = $this->createMachine($manager);
-
+        $machine = $machine = $this->createMachine($manager, function (\PHPUnit_Framework_MockObject_MockBuilder $builder) {
+            $builder->setMethods(['logCurrentState']);
+        });
         $manager->expects($this->once())->method('push');
 
         $machine->setCollectors([
             new RssCollector(
                 $this->createReader(),
-                new RssSpecificationFactory()
+                new RssSpecificationFactory(),
+                new WebSpider($this->getMockedWebClient(true))
             )
         ]);
 
@@ -54,14 +59,18 @@ class HarvestingMachineTest extends TestCase
     public function commits_data_when_more_than_one_entry_was_collected()
     {
         $manager = $this->createManager();
-        $machine = $this->createMachine($manager);
+        $machine = $machine = $this->createMachine($manager, function (\PHPUnit_Framework_MockObject_MockBuilder $builder) {
+            $builder->setMethods(['logCurrentState']);
+        });
+        $mockedClient = $this->getMockedWebClient();
 
-        $manager->expects($this->atLeast(5))->method('push');
+        $manager->expects($this->atLeast(1))->method('push');
 
         $machine->setCollectors([
             new RssCollector(
                 $this->createReader(),
-                new RssSpecificationFactory()
+                new RssSpecificationFactory(),
+                new WebSpider($mockedClient)
             )
         ]);
 
@@ -89,14 +98,15 @@ class HarvestingMachineTest extends TestCase
     public function does_not_commit_data_when_no_data_collected()
     {
         $manager = $this->createManager();
-        $machine = $this->createMachine($manager);
+        $machine = $machine = $this->createMachine($manager);
 
         $manager->expects($this->never())->method('push');
 
         $machine->setCollectors([
             new RssCollector(
                 $this->createReader(),
-                new RssSpecificationFactory()
+                new RssSpecificationFactory(),
+                new WebSpider($this->getMockedWebClient())
             )
         ]);
 
@@ -104,16 +114,20 @@ class HarvestingMachineTest extends TestCase
     }
 
     /**
+     * @param mixed $manager
+     * @param callable $preparation
      * @return \PHPUnit_Framework_MockObject_MockObject|HarvestingMachine
      */
-    private function createMachine($manager)
+    private function createMachine($manager, callable $preparation = null)
     {
         $builder = $this->getMockBuilder(HarvestingMachine::class);
-        $builder->setConstructorArgs([$manager]);
-        $builder->setMethods(['commit']);
-        $machine = $builder->getMock();
+        $builder->setConstructorArgs([$manager, $this->createMock(Logger::class)]);
 
-        return $machine;
+        if ($preparation !== null) {
+            $preparation($builder);
+        }
+
+        return $builder->getMock();
     }
 
     /**
@@ -124,7 +138,7 @@ class HarvestingMachineTest extends TestCase
         $builder = $this->getMockBuilder(FeedManager::class);
         $builder->setConstructorArgs([
             $this->createMock(EntityManager::class),
-            $this->createMock(FeedRepository::class)
+            $this->createMock(EventDispatcher::class)
         ]);
         $builder->setMethods(['push']);
 

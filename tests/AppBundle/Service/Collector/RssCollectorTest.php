@@ -4,6 +4,7 @@ namespace Tests\AppBundle\Service\Collector;
 
 use AppBundle\Entity\FeedSource;
 use AppBundle\Entity\NewsBoard;
+use AppBundle\Service\Spider\WebSpider;
 use RssSupportBundle\Factory\Specification\RssSpecificationFactory;
 use RssSupportBundle\Service\Collector\RssCollector;
 use Tests\TestCase;
@@ -18,7 +19,13 @@ class RssCollectorTest extends TestCase
      */
     public function collects_at_least_one_entry()
     {
-        $collector = new \RssSupportBundle\Service\Collector\RssCollector($this->createReader(), new RssSpecificationFactory());
+        $collector = new RssCollector(
+            $this->createReader(),
+            new RssSpecificationFactory(),
+            new WebSpider(
+                $this->getMockedWebClient()
+            )
+        );
         $feeds = $collector->collect(
             FeedSource::create(
                 new NewsBoard(),

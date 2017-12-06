@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new \AppBundle\AppBundle(),
             new \RssSupportBundle\RssSupportBundle(),
             new \ImageRepositoryBundle\ImageRepositoryBundle(),
+            new \WebProxyBundle\WebProxyBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

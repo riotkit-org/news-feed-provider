@@ -1,0 +1,17 @@
+services:
+    WebProxyBundle\Service\OneTimeViewUrlGenerator:
+        class: WebProxyBundle\Service\OneTimeViewUrlGenerator
+        arguments:
+            $webproxyUrl: '%webproxy_url%'
+            $passphrase:  '%webproxy_passphrase%'
+            $process:     '%webproxy_process%'
+            $expirationTimeInMinutes: '%webproxy_expiration_minutes%'
+
+
+    WebProxyBundle\EventDispatcher\AddSSLToUrlsEventSubscriber:
+        class: WebProxyBundle\EventDispatcher\AddSSLToUrlsEventSubscriber
+        arguments:
+            $urlGenerator: '@WebProxyBundle\Service\OneTimeViewUrlGenerator'
+            $enabled: '%webproxy_enabled_ssl%'
+        tags:
+            - kernel.event_subscriber

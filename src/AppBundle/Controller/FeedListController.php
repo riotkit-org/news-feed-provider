@@ -2,11 +2,13 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppEvents;
 use AppBundle\Form\Model\FeedEntrySearchCriteria;
 use AppBundle\Manager\FeedManager;
 use AppBundle\ValueObject\Response\FeedListingResponse;
 use AppBundle\ValueObject\Response\SearchFieldsDescriptionResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\{Request, Response};
 
 /**
@@ -35,20 +37,38 @@ class FeedListController extends Controller
             $limit = self::MAX_ENTRIES_ALLOWED;
         }
 
-        return new FeedListingResponse(
+        return $this->postProcess(new FeedListingResponse(
             $this->getManager()
                 ->getRepository()
                 ->findBySearchCriteria($criteria, $page, $limit)
-        );
+        ));
     }
 
+    /**
+     * @return Response
+     */
     public function describeSearchAction() : Response
     {
         return new SearchFieldsDescriptionResponse(new FeedEntrySearchCriteria([]));
     }
 
+    /**
+     * @return FeedManager
+     */
     protected function getManager() : FeedManager
     {
         return $this->get(FeedManager::class);
+    }
+
+    /**
+     * @param FeedListingResponse $response
+     * @return FeedListingResponse
+     */
+    private function postProcess(FeedListingResponse $response): FeedListingResponse
+    {
+        $event = new GenericEvent($response);
+        $this->get('event_dispatcher')->dispatch(AppEvents::FEED_LIST_POST_PROCESS, $event);
+
+        return $response;
     }
 }
