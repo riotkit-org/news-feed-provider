@@ -66,9 +66,10 @@ class OneTimeViewUrlGenerator
     private function generateEncryptedToken(string $url): string
     {
         $token = [
-            'url'      => $url,
-            'expires'  => (new \DateTime('now'))->modify('+' . $this->expirationTimeInMinutes . ' minutes')->format('Y-m-d H:i:s'),
-            'processs' => $this->process,
+            'url'          => $url,
+            'expires'      => (new \DateTime('now'))->modify('+' . $this->expirationTimeInMinutes . ' minutes')->format('Y-m-d H:i:s'),
+            'processs'     => $this->process,
+            'stripHeaders' => ['X-Frame-Options']
         ];
 
         return CryptoJSAES::encrypt(json_encode($token), $this->passphrase);
