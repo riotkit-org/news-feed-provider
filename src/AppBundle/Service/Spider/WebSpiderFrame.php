@@ -65,7 +65,7 @@ class WebSpiderFrame
 
         $this->removeConflictingAttributes($node);
 
-        if ($node) {
+        if ($node && $node->count() > 0) {
             return $this->purify(
                 $node->html()
             );
@@ -131,6 +131,10 @@ class WebSpiderFrame
      */
     protected function removeConflictingAttributes(Crawler $crawler)
     {
+        if ($crawler->count() === 0) {
+            return;
+        }
+        
         /**
          * @var Crawler[]|\DOMElement[] $crawler
          */
