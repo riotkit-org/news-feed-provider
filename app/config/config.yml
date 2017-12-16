@@ -71,7 +71,5 @@ liip_monitor:
         doctrine_dbal: default
         security_advisory:
             lock_file: '%kernel.root_dir%/../composer.lock'
-        symfony_requirements:
-            file: '%kernel.root_dir%/../var/SymfonyRequirements.php'
         readable_directory: ["%kernel.cache_dir%"]
         writable_directory: ["%kernel.cache_dir%"]
