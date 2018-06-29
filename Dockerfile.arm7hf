@@ -4,4 +4,7 @@ ENV APP_ENV "prod"
 ENV DATABASE_URL "sqlite:///%kernel.project_dir%/var/data.db"
 
 ADD . /var/www/html
+
+RUN [ "cross-build-start" ]
 RUN cd /var/www/html && make deploy
+RUN [ "cross-build-end" ]
