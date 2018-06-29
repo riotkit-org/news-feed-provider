@@ -1,0 +1,7 @@
+FROM wolnosciowiec/docker-php-app
+
+ENV APP_ENV "prod"
+ENV DATABASE_URL "sqlite:///%kernel.project_dir%/var/data.db"
+
+ADD . /var/www/html
+RUN cd /var/www/html && make deploy
