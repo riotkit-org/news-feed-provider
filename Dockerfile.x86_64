@@ -1,7 +1,44 @@
 FROM wolnosciowiec/docker-php-app
 
 ENV APP_ENV "prod"
-ENV DATABASE_URL "sqlite:///%kernel.project_dir%/var/data.db"
 
+# parameters.php
+ENV NFP_DB_DRIVER "pdo_sqlite"
+ENV NFP_DB_HOST "db"
+ENV NFP_DB_PORT "~"
+ENV NFP_DB_NAME "notification"
+ENV NFP_DB_USER "root"
+ENV NFP_DB_PASSWORD ""
+ENV NFP_MAILER_TRANSPORT "smtp"
+ENV NFP_MAILER_HOST "mail"
+ENV NFP_MAILER_PORT "25"
+ENV NFP_MAILER_USER "root@nfp"
+ENV NFP_MAILER_PASSWD ""
+ENV NFP_MAILER_ENCRYPTION "tls"
+ENV NFP_MAILER_SENDER_ADDRESS ""
+ENV NFP_SECRET "app-secret-here"
+
+ENV NFP_FILE_REPO_ENABLED 0
+ENV NFP_FILE_REPO_URL "https://example.org"
+ENV NFP_FILE_REPO_CACHE_NAME "Void"
+ENV NFP_FILE_REPO_TAG "news-feed-provider"
+ENV NFP_REPO_TOKEN "xxx"
+
+ENV NFP_MONITORING_KEY "super-secret-api-key"
+
+ENV NFP_WEB_PROXY_URL ""
+ENV NFP_WEB_PROXY_PASSPHRASE ""
+ENV NFP_PROCESS_INTERNAL_LINKS 1
+ENV NFP_EXPIRATION_TIME_MINUTES 1
+ENV NFP_ENABLED_SSL 1
+
+ADD ./docker-entrypoint.sh /docker-entrypoint.sh
 ADD . /var/www/html
-RUN cd /var/www/html && make deploy
+RUN cd /var/www/html \
+    && chown www-data:www-data /var/www/html -R \
+    && mv ./web/app.php ./web/index.php \
+    && su www-data -s /bin/bash -c make deploy
+
+RUN chown www-data:www-data /var/www/html -R
+
+ENTRYPOINT ["/docker-entrypoint.sh"]

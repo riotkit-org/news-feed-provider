@@ -121,7 +121,7 @@ and replace all usages.
 `File Repository` is a [Wolnościowiec's microservice](https://github.com/Wolnosciowiec/file-repository) that exposes an API interface for file storage,
 the service itself handles de-duplication, caching and of course storing the files in right places.
 
-To enable the integration simply only all paramters in `parameters.yml` needs to be filled up properly,
+To enable the integration simply only all environment variables needs to be filled up properly,
 the rest is handled by the `ImageRepositoryBundle`.
 
 #### Web-Proxy integration
@@ -139,15 +139,26 @@ Enabling:
 
 ```
 # web-proxy
-webproxy_url: "https://some-proxy.services.someservice.org"
-webproxy_passphrase: "my-super-secret-passphrase-from-webproxy-service"
-webproxy_process: true # process HTML and CSS content, so all static content will be rendered by the proxy
-webproxy_expiration_minutes: 1
-webproxy_enabled_ssl: true
+NFP_WEB_PROXY_URL="https://some-proxy.services.someservice.org"
+NFP_WEB_PROXY_PASSPHRASE="my-super-secret-passphrase-from-webproxy-service"
+NFP_PROCESS_INTERNAL_LINKS=1 # process HTML and CSS content, so all static content will be rendered by the proxy
+NFP_EXPIRATION_TIME_MINUTES=1
+NFP_ENABLED_SSL=true
 ```
 
 #### Health checking
 
-There is an endpoint that shows the application health, it's placed under `{{DOMAIN}}/{{HEALTH_CHECK_API_KEY}}/monitor/health/run`
-HEALTH_CHECK_API_KEY is a defined parameter "monitoring_api_key" from parameters.yml
+There is an endpoint that shows the application health, it's placed under `{{DOMAIN}}/{{NFP_MONITORING_KEY}}/monitor/health/run`
+NFP_MONITORING_KEY is a environment variable you can pass to nginx/apache/docker
 
+#### Setting up using Docker
+
+There exists an image `wolnosciowiec/news-feed-provider`, it uses environment variables to configure the application.
+You may want to take a look at the list of variables with example values in the [Dockerfile](./Dockerfile.x86_64).
+
+```
+sudo docker run -e NFP_MAILER_HOST=somehost -e NFP_MAILER_USER=someuser -p 80:80 wolnosciowiec/news-feed-provider
+```
+
+There are a lot of configuration variables so you might consider using a `docker-compose` for simple usage,
+or `docker-swarm` or `Kubernetes` if scaling in a cluser.

@@ -48,3 +48,11 @@ migrate:
 deploy:
 	make build
 	make migrate
+
+## Docker image for x86_64 architecture
+docker_image:
+	sudo docker build -f ./Dockerfile.x86_64 . -t wolnosciowiec/news-feed-provider
+
+## Docker image for arm7hf architecture
+docker_image@arm7hf:
+	sudo docker build -f ./Dockerfile.arm7hf . -t wolnosciowiec/news-feed-provider:arm7hf
