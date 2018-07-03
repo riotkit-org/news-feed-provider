@@ -59,7 +59,7 @@ build@arm7hf:
 
 ## Push x86_64 image to registry
 push@x86_64:
-	sudo docker push wolnosciowiec/dnews-feed-provider
+	sudo docker push wolnosciowiec/news-feed-provider
 
 ## Push arm7hf image to registry
 push@arm7hf:
