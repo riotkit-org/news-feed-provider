@@ -37,8 +37,6 @@ ADD . /var/www/html
 RUN cd /var/www/html \
     && chown www-data:www-data /var/www/html -R \
     && mv ./web/app.php ./web/index.php \
-    && su www-data -s /bin/bash -c make deploy
-
-RUN chown www-data:www-data /var/www/html -R
+    && su www-data -s /bin/bash -c "make deploy"
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
