@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__.'/../vendor/autoload.php';
 Debug::enable();
 
-$kernel = new AppKernel('dev', true);
+$kernel = new NfpKernel('dev', true);
 if (PHP_VERSION_ID < 70000) {
     $kernel->loadClassCache();
 }

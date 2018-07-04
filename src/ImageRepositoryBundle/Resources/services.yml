@@ -2,7 +2,7 @@ services:
     ImageRepositoryBundle\Service\ImageUploader:
         class: ImageRepositoryBundle\Service\ImageUploader
         arguments:
-            $uploader: "@wolnosciowiec.file_repository.uploader"
+            $uploader: '@Wolnosciowiec\FileRepositoryBundle\Service\FileUploader'
             $imageTags: ['%file_repository_tag%']
 
     ImageRepositoryBundle\Service\ImageExtractor:
