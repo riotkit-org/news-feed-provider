@@ -1,36 +1,32 @@
 FROM wolnosciowiec/docker-php-app
 
-ENV APP_ENV "prod"
-
-# parameters.php
-ENV NFP_DB_DRIVER "pdo_sqlite"
-ENV NFP_DB_HOST "db"
-ENV NFP_DB_PORT "~"
-ENV NFP_DB_NAME "notification"
-ENV NFP_DB_USER "root"
-ENV NFP_DB_PASSWORD ""
-ENV NFP_MAILER_TRANSPORT "smtp"
-ENV NFP_MAILER_HOST "mail"
-ENV NFP_MAILER_PORT "25"
-ENV NFP_MAILER_USER "root@nfp"
-ENV NFP_MAILER_PASSWD ""
-ENV NFP_MAILER_ENCRYPTION "tls"
-ENV NFP_MAILER_SENDER_ADDRESS ""
-ENV NFP_SECRET "app-secret-here"
-
-ENV NFP_FILE_REPO_ENABLED 0
-ENV NFP_FILE_REPO_URL "https://example.org"
-ENV NFP_FILE_REPO_CACHE_NAME "Void"
-ENV NFP_FILE_REPO_TAG "news-feed-provider"
-ENV NFP_REPO_TOKEN "xxx"
-
-ENV NFP_MONITORING_KEY "super-secret-api-key"
-
-ENV NFP_WEB_PROXY_URL ""
-ENV NFP_WEB_PROXY_PASSPHRASE ""
-ENV NFP_PROCESS_INTERNAL_LINKS 1
-ENV NFP_EXPIRATION_TIME_MINUTES 1
-ENV NFP_ENABLED_SSL 1
+ENV APP_ENV="prod" \
+    NFP_DB_DRIVER="pdo_sqlite" \
+    NFP_DB_HOST="db" \
+    NFP_DB_PORT="~" \
+    NFP_DB_NAME="notification" \
+    NFP_DB_USER="root" \
+    NFP_DB_PASSWORD="" \
+    NFP_MAILER_TRANSPORT="smtp" \
+    NFP_MAILER_HOST="mail" \
+    NFP_MAILER_PORT="25" \
+    NFP_MAILER_USER="root@nfp" \
+    NFP_MAILER_PASSWD="" \
+    NFP_MAILER_ENCRYPTION="tls" \
+    NFP_MAILER_SENDER_ADDRESS="" \
+    NFP_SECRET="app-secret-here" \
+    NFP_DOCTRINE_CACHE="array" \
+    NFP_FILE_REPO_ENABLED=0 \
+    NFP_FILE_REPO_URL="https://example.org" \
+    NFP_FILE_REPO_CACHE_NAME="Void" \
+    NFP_FILE_REPO_TAG="news-feed-provider" \
+    NFP_REPO_TOKEN="xxx" \
+    NFP_MONITORING_KEY="super-secret-api-key" \
+    NFP_WEB_PROXY_URL="" \
+    NFP_WEB_PROXY_PASSPHRASE="" \
+    NFP_PROCESS_INTERNAL_LINKS=1 \
+    NFP_EXPIRATION_TIME_MINUTES=1 \
+    NFP_ENABLED_SSL=1
 
 ADD ./docker-entrypoint.sh /docker-entrypoint.sh
 ADD . /var/www/html

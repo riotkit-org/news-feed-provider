@@ -29,6 +29,7 @@ $parameters = [
     'mailer_sender_address' => envOrDefault('NFP_MAILER_SENDER_ADDRESS', 'anarchist-notifier@localhost'),
 
     'secret' => envOrDefault('NFP_SECRET', 'ThisTokenIsNotSoSecretChangeIt'),
+    'doctrine_orm_cache' => envOrDefault('NFP_DOCTRINE_CACHE', 'array'),
 
     // Wolnościowiec File Repository integration (for cloud storage)
     'file_repository_url'        => envOrDefault('NFP_FILE_REPO_URL', 'https://example.org'),
