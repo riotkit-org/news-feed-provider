@@ -64,3 +64,8 @@ push@x86_64:
 ## Push arm7hf image to registry
 push@arm7hf:
 	sudo docker push wolnosciowiec/news-feed-provider:arm7hf
+
+build_docker_image:
+	chown www-data:www-data /var/www/html -R
+	mv ./web/app.php ./web/index.php
+	su www-data -s /bin/bash -c "cd /var/www/html && make deploy"
