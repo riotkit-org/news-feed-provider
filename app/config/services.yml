@@ -91,3 +91,11 @@ services:
             $spider: '@AppBundle\Service\Spider\WebSpider'
         tags:
             - kernel.event_subscriber
+
+    AppBundle\Event\Subscriber\ApiResponsesSubscriber:
+        class: AppBundle\Event\Subscriber\ApiResponsesSubscriber
+        public: false
+        arguments:
+            $isDebugging: '%kernel.debug%'
+        tags:
+            - kernel.event_subscriber
