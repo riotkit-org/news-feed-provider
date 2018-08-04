@@ -38,6 +38,7 @@ setup_database_first_time:
 ## Build the application by running preparation tasks such as composer install
 build:
 	composer install --dev
+	php ./bin/console cache:clear --env=${ENV}
 	php ./bin/console cache:warmup --env=${ENV}
 
 ## Migrate the database
