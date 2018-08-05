@@ -58,3 +58,6 @@ AppBundle\Entity\FeedSource:
         newsBoard:
             targetEntity: AppBundle\Entity\NewsBoard
             inversedBy: feedSources
+            joinColumn:
+                name: news_board_id
+                referencedColumnName: id

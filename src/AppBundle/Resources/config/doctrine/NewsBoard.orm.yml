@@ -28,5 +28,4 @@ AppBundle\Entity\NewsBoard:
     oneToMany:
         feedSources:
             targetEntity: AppBundle\Entity\FeedSource
-            inversedBy: newsBoard
-            mappedBy: feedSources
+            mappedBy: newsBoard
