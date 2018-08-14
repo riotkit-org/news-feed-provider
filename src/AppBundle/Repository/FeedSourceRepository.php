@@ -54,7 +54,7 @@ class FeedSourceRepository extends EntityRepository
     public function findAllByBoardId(string $boardId)
     {
         $qb = $this->createQueryBuilder('f');
-        $qb->where('f.newsBoard.id = :boardId');
+        $qb->andWhere('f.newsBoard = :boardId');
         $qb->setParameter('boardId', $boardId);
 
         $this->applySortingCriteria($qb);

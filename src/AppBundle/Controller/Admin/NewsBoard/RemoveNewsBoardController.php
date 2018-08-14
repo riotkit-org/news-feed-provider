@@ -2,30 +2,29 @@
 
 namespace AppBundle\Controller\Admin\NewsBoard;
 
-use AppBundle\Entity\FeedSource;
+use AppBundle\Entity\NewsBoard;
 use AppBundle\Manager\NewsBoardManager;
 use AppBundle\ValueObject\Response\EntityNotFoundResponse;
 use AppBundle\ValueObject\Response\EntityRemovedResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @see FeedSource
+ * @see NewsBoard
  */
 class RemoveNewsBoardController extends Controller
 {
-    public function removeAction(Request $request, string $sourceId)
+    public function removeAction(string $boardId)
     {
-        $feedSource = $this->getManager()->getRepository()->find($sourceId);
+        $board = $this->getManager()->getRepository()->find($boardId);
 
-        if (!$feedSource instanceof FeedSource) {
-            return new EntityNotFoundResponse('feedsource', $sourceId);
+        if (!$board instanceof NewsBoard) {
+            return new EntityNotFoundResponse('newsboard', $boardId);
         }
 
-        $this->getManager()->remove($feedSource);
-        $this->getManager()->flush($feedSource);
+        $this->getManager()->remove($board);
+        $this->getManager()->flush($board);
 
-        return new EntityRemovedResponse($feedSource);
+        return new EntityRemovedResponse($board);
     }
 
     protected function getManager() : NewsBoardManager
